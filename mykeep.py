@@ -49,11 +49,10 @@ def add_entry(args):
         print(e)
         exit(1)
     storage = st.Storage(storagefile)
-
     data_dict = _get_decrypted_dict(crypto, storage)
-
+    pwd = pwd_utils.generate_pwd() if args.pwd=='random' else args.pwd
     try:
-        model.Model().add_entry(data_dict, name=args.name, link=args.link, pwd=args.pwd, tags=args.tags)
+        model.Model().add_entry(data_dict, name=args.name, link=args.link, pwd=pwd, tags=args.tags)
     except ValueError as e:
         print(e)
         exit(1)
