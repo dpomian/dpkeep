@@ -1,2 +1,4 @@
 .DS_Store
 __pycache__
+.keep_backup
+res/prd/.mykeep_storage

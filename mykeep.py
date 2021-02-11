@@ -76,8 +76,8 @@ def cp_pwd(args):
     crypto = cry.Crypto(utils.get_password(netrcfile))
     storage = st.Storage(storagefile)
     data_dict = _get_decrypted_dict(crypto, storage)
-    if args.name in data_dict:
-        clipboard.copy(data_dict[args.name]['pwd'])
+
+    clipboard.copy(data_dict[args.name]['pwd']) if args.name in data_dict else clipboard.copy('')
 
 
 def remove_entry(args):
@@ -165,7 +165,7 @@ def main():
     add_parser.add_argument("-tags", help="add comma separated tags")
     add_parser.set_defaults(func=add_entry)
 
-    list_parser = subparsers.add_parser('list', help='list all')
+    list_parser = subparsers.add_parser('ll', help='list all')
     list_parser.set_defaults(func=list_all)
 
     cp_parser = subparsers.add_parser('cp', help='copy pwd to clipboard')
