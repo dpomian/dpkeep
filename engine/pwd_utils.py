@@ -14,10 +14,3 @@ def generate_pwd():
         
     return '-'.join(grps)
 
-
-def main():
-    print(generate_pwd())
-
-
-if __name__ == '__main__':
-    main()

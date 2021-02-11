@@ -10,8 +10,11 @@ from engine import utils
 from engine import storage as st
 from engine import crypto as cry
 from engine import model
+from engine import pwd_utils
 
-# STORAGE = "{}/.dpkeep".format(os.path.expanduser("~")) 
+# STORAGE = "{}/.dpkeep".format(os.path.expanduser("~"))
+netrcfile = ''
+storagefile = ''
 
 def mp(text, var):
     print('{}: {}'.format(text, var))
@@ -41,14 +44,14 @@ def _get_decrypted_dict(crypto, storage):
 def add_entry(args):
     crypto = None
     try:
-        crypto = cry.Crypto(utils.get_password("./res/prd/.netrc"))
+        crypto = cry.Crypto(utils.get_password(netrcfile))
     except ValueError as e:
         print(e)
         exit(1)
-    storage = st.Storage("./res/prd/.mykeep_storage")
+    storage = st.Storage(storagefile)
 
     data_dict = _get_decrypted_dict(crypto, storage)
-    
+
     try:
         model.Model().add_entry(data_dict, name=args.name, link=args.link, pwd=args.pwd, tags=args.tags)
     except ValueError as e:
@@ -60,8 +63,8 @@ def add_entry(args):
 
 
 def list_all(args):
-    crypto = cry.Crypto(utils.get_password("./res/prd/.netrc"))
-    storage = st.Storage("./res/prd/.mykeep_storage")
+    crypto = cry.Crypto(utils.get_password(netrcfile))
+    storage = st.Storage(storagefile)
     data_dict = _get_decrypted_dict(crypto, storage)
     for key in sorted(data_dict.keys()):
         print(_format_entry(data_dict, key))
@@ -70,8 +73,8 @@ def list_all(args):
 def cp_pwd(args):
     if not args.name:
         return
-    crypto = cry.Crypto(utils.get_password("./res/prd/.netrc"))
-    storage = st.Storage("./res/prd/.mykeep_storage")
+    crypto = cry.Crypto(utils.get_password(netrcfile))
+    storage = st.Storage(storagefile)
     data_dict = _get_decrypted_dict(crypto, storage)
     if args.name in data_dict:
         clipboard.copy(data_dict[args.name]['pwd'])
@@ -80,8 +83,8 @@ def cp_pwd(args):
 def remove_entry(args):
     if not args.name:
         return
-    crypto = cry.Crypto(utils.get_password("./res/prd/.netrc"))
-    storage = st.Storage("./res/prd/.mykeep_storage")
+    crypto = cry.Crypto(utils.get_password(netrcfile))
+    storage = st.Storage(storagefile)
     data_dict = _get_decrypted_dict(crypto, storage)
     model.Model().remove_entry(data_dict, args.name)
 
@@ -117,7 +120,7 @@ def chng_pwd(args):
     n_pwd = data[1][len('new:'):]
 
     decryptor = cry.Crypto(c_pwd)
-    storage = st.Storage("./res/prd/.mykeep_storage")
+    storage = st.Storage(storagefile)
     try:
         decrypted = decryptor.decrypt(storage.read())
     except cryptography.fernet.InvalidToken as e:
@@ -128,21 +131,29 @@ def chng_pwd(args):
     storage.write(encryptor.encrypt(decrypted))
 
     tmp = [n_pwd.encode()]
-    _replace_in_file('./res/prd/.netrc', tmp)
+    _replace_in_file(netrcfile, tmp)
 
     tmp = ['current:{}\n'.format(n_pwd).encode(), 'new:{}'.format(n_pwd).encode()]
     _replace_in_file('./res/prd/.mig_netrc', tmp)
 
 
 def update_entry(args):
-    crypto = cry.Crypto(utils.get_password("./res/prd/.netrc"))
-    storage = st.Storage("./res/prd/.mykeep_storage")
+    crypto = cry.Crypto(utils.get_password(netrcfile))
+    storage = st.Storage(storagefile)
     data_dict = _get_decrypted_dict(crypto, storage)
     data_dict = model.Model().update_entry(data_dict, name=args.name, link=args.link, pwd=args.pwd, tags=args.tags)
     storage.write(crypto.encrypt(json.dumps(data_dict)))
 
 
+def generate_random_password(args):
+    print('pwd: {}'.format(pwd_utils.generate_pwd()))
+
+
 def main():
+    global netrcfile, storagefile
+    netrcfile = os.path.join(os.path.dirname(__file__),'res/prd/.netrc')
+    storagefile = os.path.join(os.path.dirname(__file__),'res/prd/.mykeep_storage')
+
     parser = argparse.ArgumentParser(description="Password keepr", prog="mykeep", allow_abbrev=True)
 
     subparsers = parser.add_subparsers(help='commands')
@@ -157,7 +168,7 @@ def main():
     list_parser = subparsers.add_parser('list', help='list all')
     list_parser.set_defaults(func=list_all)
 
-    cp_parser = subparsers.add_parser('cp', help='copy pwd to clipboard') 
+    cp_parser = subparsers.add_parser('cp', help='copy pwd to clipboard')
     cp_parser.add_argument("name", help="name")
     cp_parser.set_defaults(func=cp_pwd)
 
@@ -175,6 +186,9 @@ def main():
     chng_parser = subparsers.add_parser('chng', help="change password")
     chng_parser.add_argument("netrc", help="netrc file for change password")
     chng_parser.set_defaults(func=chng_pwd)
+
+    gen_parser = subparsers.add_parser('genpwd', help="generates a random password")
+    gen_parser.set_defaults(func=generate_random_password)
 
     args = parser.parse_args()
     if hasattr(args, 'func'):
@@ -221,7 +235,7 @@ class MyKeepTest(unittest.TestCase):
         expected = {'l1': {'link':'google.com', 'pwd':'secretpwd', 'tags':'t1,t2'}}
         actual = model.Model().remove_entry(existing, 'l2')
         self.assertDictEqual(expected, actual)
-        
+
     def test_remove_entry_success(self):
         existing = {'l1': {'link':'google.com', 'pwd':'secretpwd', 'tags':'t1,t2'}}
         expected = {}
