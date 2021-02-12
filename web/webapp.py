@@ -28,7 +28,7 @@ def home():
 
     return render_template('index.html', data=data_dict)
 
-@app.route('/keep/cp/', methods=['GET'])
+@app.route('/keep/api/v1/cp/', methods=['GET'])
 def copy():
     name = request.args['name'] if 'name' in request.args else None
 
@@ -47,6 +47,7 @@ def pass_gen():
 @app.route('/keep/api/v1/passgen/', methods=['GET'])
 def pass_gen_api():
     pwd = pwd_utils.generate_pwd()
+    clipboard.copy(pwd)
     return jsonify({'data':{'pwd':pwd}})
 
 app.run()
