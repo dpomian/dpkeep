@@ -1,7 +1,7 @@
 #!/bin/sh
-BKP="./.keep_backup"
-NETRC="./res/prd/.netrc"
-STORAGE="./res/prd/.mykeep_storage"
+BKP="/Users/dpomian/hardwork/pywork/dpkeep/.keep_backup"
+NETRC="/Users/dpomian/hardwork/pywork/dpkeep/res/prd/.netrc"
+STORAGE="/Users/dpomian/hardwork/pywork/dpkeep/res/prd/.mykeep_storage"
 
 if test -f "$BKP"; then
 	chmod +w $BKP
