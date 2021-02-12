@@ -1,2 +1,3 @@
 cryptography==3.4.3
 clipboard==0.0.4
+flask==1.1.2

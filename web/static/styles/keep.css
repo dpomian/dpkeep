@@ -1,0 +1,71 @@
+* {
+  box-sizing: border-box;
+}
+
+#myInput {
+  background-image: url('/css/searchicon.png');
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
+#keeptable {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #ddd;
+  font-size: 16px;
+}
+
+#keeptable tr {
+  border-bottom: 1px solid #ddd;
+}
+
+#keeptable th, #keeptable td {
+  text-align: left;
+  padding: 10px;
+}
+
+
+#keeptable tr.header, #keeptable tr:hover {
+  background-color: #f1f1f1;
+}
+
+.center {
+	text-align: center;
+}
+
+
+/*
+button {
+		display: inline-block;
+    padding: 0.3em 1em;
+    text-decoration: none;
+    color: #67c5ff;
+    border: solid 2px #67c5ff;
+    border-radius: 3px;
+    transition: .4s;
+		width: 75px;
+}
+*/
+
+button {
+    position: relative;
+    display: inline-block;
+    font-weight: bold;
+    padding: 0.25em 0.5em;
+    text-decoration: none;
+    color: #FFF;
+    background: #00bcd4;
+    transition: .4s;
+		width: 75px;
+    height: 25px;
+		border: none;
+  }
+
+button:hover {
+    background: #1ec7bb;
+}
