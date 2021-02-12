@@ -11,7 +11,7 @@
 			function copy(name, button) {
 				$.ajax({
 					type: 'GET',
-					url: '/keep/cp?name=' + name,
+					url: '/keep/api/v1/cp?name=' + name,
 					success: function(resp) {
 						if (prevButton != null) {
 							prevButton.style.background=button.style.background;
