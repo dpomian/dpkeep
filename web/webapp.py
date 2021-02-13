@@ -26,7 +26,7 @@ def home():
     storage = st.Storage(storagefile)
     data_dict = _get_decrypted_dict(crypto, storage)
 
-    return render_template('index.html', data=data_dict)
+    return render_template('index2.html', data=data_dict)
 
 @app.route('/keep/api/v1/cp/', methods=['GET'])
 def copy():

@@ -1,0 +1,83 @@
+<html>
+	<head>
+		<title>Keep</title>
+		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/keep2.css') }}">
+	</head>
+<style>
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script type="text/javascript">
+			var prevButton = null;
+			function copy(name, button) {
+				$.ajax({
+					type: 'GET',
+					url: '/keep/api/v1/cp?name=' + name,
+					success: function(resp) {
+						if (prevButton != null) {
+							prevButton.style.background=button.style.background;
+							prevButton.textContent=button.textContent;
+						}
+						prevButton = button;
+						button.style.background='#009900';
+						button.textContent='copied';
+					},
+					error: function() {
+					}
+				});
+			}
+
+			function filterBySearch() {
+				var td, i, tdArr, j;
+				var input = document.getElementById("searchInput");
+				var filter = input.value.toUpperCase();
+				var table = document.getElementById("keeptable");
+				var tr = table.getElementsByTagName("tr");
+
+				// Loop through all table rows
+				for (i = 1; i < tr.length; i++) {
+					tdArr = tr[i].getElementsByTagName("td");
+					// Loop through all table columns in the current row, and hide those who don't match the search query
+					var found = false;
+					for (j = 0; j < tdArr.length; j++) {
+						td = tdArr[j];
+						if (td) {
+							if (td.textContent.toUpperCase().indexOf(filter) > -1 ) {
+								found = true;
+								break;
+							}								
+						}
+					}        
+
+					if (found) {
+						tr[i].style.display = "";
+					} else {
+						tr[i].style.display = "none";
+					}
+				}
+			}
+		</script>
+	<body>
+		<h1>The <span class="darkgreen">Keep</pan></h1>
+		<input type="text" id="searchInput" onkeyup="filterBySearch()" placeholder="Search here..." title="Type in a name">
+		<table id="keeptable" class="container">
+			<thead>
+				<tr>
+					<th style="width:10%"><h1>Name</h1></th>
+					<th style="width:15%"><h1>Tags</h1></th>
+					<th style="width:65%"><h1>Link</h1></th>
+					<th style="width:10%"><h1></h1></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for key in data %}
+					<tr>
+						<td>{{ key }}</td>
+						<td>{{ data[key].tags }}</td>
+						<td><a href="{{ data[key].link }}">{{ data[key].link }}</a></td>
+						<td><button type="button" onclick="copy('{{ key }}', this)">>copy</button></td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</body>
+</html>
