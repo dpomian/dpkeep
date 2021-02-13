@@ -13,13 +13,15 @@
 					type: 'GET',
 					url: '/keep/api/v1/cp?name=' + name,
 					success: function(resp) {
+						var currentHref = button.getElementsByTagName('a')[0];
 						if (prevButton != null) {
-							prevButton.style.background=button.style.background;
-							prevButton.textContent=button.textContent;
+							var prevHref = prevButton.getElementsByTagName('a')[0];
+							prevHref.innerHTML = 'copy';
+							prevHref.style.color = currentHref.style.color;
 						}
 						prevButton = button;
-						button.style.background='#009900';
-						button.textContent='copied';
+						currentHref.innerHTML = 'copied';
+						currentHref.style.color = '#00ff00';
 					},
 					error: function() {
 					}
@@ -44,9 +46,9 @@
 							if (td.textContent.toUpperCase().indexOf(filter) > -1 ) {
 								found = true;
 								break;
-							}								
+							}
 						}
-					}        
+					}
 
 					if (found) {
 						tr[i].style.display = "";
@@ -74,7 +76,12 @@
 						<td>{{ key }}</td>
 						<td>{{ data[key].tags }}</td>
 						<td><a href="{{ data[key].link }}">{{ data[key].link }}</a></td>
-						<td><button type="button" onclick="copy('{{ key }}', this)">>copy</button></td>
+						<td>
+							<div class="button" id="button-5" onclick="copy('{{ key }}', this)">
+								<div id="translate"></div>
+								<a href="#">copy</a>
+							</div>
+						</td>
 					</tr>
 				{% endfor %}
 			</tbody>

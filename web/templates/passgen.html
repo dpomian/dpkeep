@@ -1,37 +1,9 @@
 <html>
 	<head>
 		<title>PassGen</title>
-		<!--<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/keep.css') }}">-->
+		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/passgen.css') }}">
 	</head>
 <style>
-
-button {
-	position: relative;
-	display: inline-block;
-	font-weight: bold;
-	font-size: 14px;
-	padding: 0.25em 0.5em;
-	text-decoration: none;
-	color: #FFF;
-	background: #00bcd4;
-	transition: .4s;
-	width: 95px;
-	height: 35px;
-	border: none;
-}
-
-label {
-	/*background: #00bcd4;*/
-	font-size: 18px;
-	/*color: #FFF;*/
-	height: 35px;
-	padding: 0.25em 0.5em;
-}
-
-.center {
-	text-align: center;
-}
-
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
@@ -49,7 +21,7 @@ label {
 </script>
 <body>
 	<div class="parent center">
-		<h1>Random password generator</h1>
+		<h1>Random password <span class="darkgreen">Generator</span></h1>
 
 		<button class="button" onclick="generate()">generate</button>
 		<br/><br/>

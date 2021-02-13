@@ -1,0 +1,45 @@
+.darkgreen { color: #185875 }
+
+h1 {
+  font-size:3em; 
+  font-weight: 300;
+  line-height:1em;
+  text-align: center;
+  color: #4DC3FA;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+  line-height: 1.42em;
+  color:#A7A1AE;
+  background-color:#1F2739;
+}
+
+button {
+	position: relative;
+	display: inline-block;
+	font-weight: bold;
+	font-size: 14px;
+	padding: 0.25em 0.5em;
+	text-decoration: none;
+	color: #FFF;
+	background: #00bcd4;
+	transition: .4s;
+	width: 95px;
+	height: 35px;
+	border: none;
+}
+
+label {
+	/*background: #00bcd4;*/
+	font-size: 18px;
+	/*color: #FFF;*/
+	height: 35px;
+	padding: 0.25em 0.5em;
+}
+
+.center {
+	text-align: center;
+}
+
