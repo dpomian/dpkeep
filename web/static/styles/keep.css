@@ -2,9 +2,10 @@
   box-sizing: border-box;
 }
 
-#myInput {
-  background-image: url('/css/searchicon.png');
+#searchInput {
+  background-image: url('searchicon.png');
   background-position: 10px 10px;
+	background-size: 25px 25px;
   background-repeat: no-repeat;
   width: 100%;
   font-size: 16px;

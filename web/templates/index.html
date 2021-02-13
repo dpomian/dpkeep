@@ -28,7 +28,7 @@
 
 			function filterBySearch() {
 				var td, i, tdArr, j;
-				var input = document.getElementById("myInput");
+				var input = document.getElementById("searchInput");
 				var filter = input.value.toUpperCase();
 				var table = document.getElementById("keeptable");
 				var tr = table.getElementsByTagName("tr");
@@ -59,7 +59,7 @@
 	<body>
 		<h1 class="center">Welcome to the Keep</h1>
 			<div id="keepdiv">
-			<input type="text" id="myInput" onkeyup="filterBySearch()" placeholder="Search here..." title="Type in a name">
+			<input type="text" id="searchInput" onkeyup="filterBySearch()" placeholder="Search here..." title="Type in a name">
 			<table id="keeptable">
 				<tr class="header">
 					<th style="width:10%">Name</th>
