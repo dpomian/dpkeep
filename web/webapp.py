@@ -17,17 +17,16 @@ from engine import pwd_utils
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
-netrcfile = os.path.join(os.path.dirname(__file__),'../res/prd/.netrc')
-storagefile = os.path.join(os.path.dirname(__file__),'../res/prd/.mykeep_storage')
 
 @app.route('/keep/', methods=['GET'])
 def home():
-    global netrcfile, storagefile
+    netrcfile = os.path.join(os.path.dirname(__file__),'../res/prd/.netrc')
+    storagefile = os.path.join(os.path.dirname(__file__),'../res/prd/.mykeep_storage')
     crypto = cry.Crypto(utils.get_password(netrcfile))
     storage = st.Storage(storagefile)
     data_dict = _get_decrypted_dict(crypto, storage)
 
-    return render_template('index2.html', data=data_dict)
+    return render_template('index.html', data=data_dict)
 
 @app.route('/keep/api/v1/cp/', methods=['GET'])
 def copy():

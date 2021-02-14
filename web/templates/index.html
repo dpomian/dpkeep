@@ -1,82 +1,181 @@
 <html>
 	<head>
 		<title>Keep</title>
-		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/keep.css') }}">
+		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
+		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/add_new.css') }}">
+		<link href="https://parsleyjs.org/src/parsley.css" rel="stylesheet" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	</head>
 <style>
 </style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-		<script type="text/javascript">
-			var prevButton = null;
-			function copy(name, button) {
-				$.ajax({
-					type: 'GET',
-					url: '/keep/api/v1/cp?name=' + name,
-					success: function(resp) {
-						if (prevButton != null) {
-							prevButton.style.background=button.style.background;
-							prevButton.textContent=button.textContent;
-						}
-						prevButton = button;
-						button.style.background='#009900';
-						button.textContent='copied';
-					},
-					error: function() {
+	<script type="text/javascript">
+		var prevButton = null;
+		function copy(name, button) {
+			$.ajax({
+				type: 'GET',
+				url: '/keep/api/v1/cp?name=' + name,
+				success: function(resp) {
+					var currentHref = button.getElementsByTagName('a')[0];
+					if (prevButton != null) {
+						var prevHref = prevButton.getElementsByTagName('a')[0];
+						prevHref.innerHTML = 'copy';
+						prevHref.style.color = currentHref.style.color;
 					}
-				});
-			}
+					prevButton = button;
+					currentHref.innerHTML = 'copied';
+					currentHref.style.color = '#00ff00';
+				},
+				error: function() {
+				}
+			});
+		}
 
-			function filterBySearch() {
-				var td, i, tdArr, j;
-				var input = document.getElementById("searchInput");
-				var filter = input.value.toUpperCase();
-				var table = document.getElementById("keeptable");
-				var tr = table.getElementsByTagName("tr");
+		function filterBySearch() {
+			var td, i, tdArr, j;
+			var input = document.getElementById("searchInput");
+			var filter = input.value.toUpperCase();
+			var table = document.getElementById("keeptable");
+			var tr = table.getElementsByTagName("tr");
 
-				// Loop through all table rows
-				for (i = 1; i < tr.length; i++) {
-					tdArr = tr[i].getElementsByTagName("td");
-					// Loop through all table columns in the current row, and hide those who don't match the search query
-					var found = false;
-					for (j = 0; j < tdArr.length; j++) {
-						td = tdArr[j];
-						if (td) {
-							if (td.textContent.toUpperCase().indexOf(filter) > -1 ) {
-								found = true;
-								break;
-							}								
+			// Loop through all table rows
+			for (i = 1; i < tr.length; i++) {
+				tdArr = tr[i].getElementsByTagName("td");
+				// Loop through all table columns in the current row, and hide those who don't match the search query
+				var found = false;
+				for (j = 0; j < tdArr.length; j++) {
+					td = tdArr[j];
+					if (td) {
+						if (td.textContent.toUpperCase().indexOf(filter) > -1 ) {
+							found = true;
+							break;
 						}
-					}        
-
-					if (found) {
-						tr[i].style.display = "";
-					} else {
-						tr[i].style.display = "none";
 					}
 				}
+
+				if (found) {
+					tr[i].style.display = "";
+				} else {
+					tr[i].style.display = "none";
+				}
 			}
-		</script>
+		}
+
+	function onSubmitForm(){
+		console.log(document.getElementById("actual-registration-form"))
+		var nameVal = document.getElementsByName("input-name")[0].value;
+		var linkVal = document.getElementsByName("input-link")[0].value;
+		var tagsVal = document.getElementsByName("input-tags")[0].value;
+		var pwdVal = document.getElementsByName("input-pwd")[0].value;
+		console.log(nameVal);
+		console.log(linkVal);
+		console.log(tagsVal);
+		console.log(pwdVal);
+		var data = {
+			"name": nameVal,
+			"link": linkVal,
+			"tags": tagsVal,
+			"pwd": pwdVal
+		}
+
+		$.ajax({
+			type: 'POST',
+			url: '/keep/api/v1/new_entry' + name,
+			data: JSON.stringify(data),
+			contentType: "application/json; charset=utf-8",
+			dataType: "json",
+			success: function(resp) {
+				console.log('success');
+				console.log(resp);
+			},
+			error: function() {
+				console.log('error');
+			}
+		});
+
+		document.getElementById("actual-registration-form").reset();
+		closeForm();
+
+		return false;
+	}
+
+	function openForm() {
+		console.log('in openForm');
+		document.getElementById("mymodal").style.display = "block";
+		var span = document.getElementsByClassName("close")[0];
+		span.onclick = closeForm;
+	}
+
+	function closeForm() {
+		document.getElementById("actual-registration-form").reset();
+		document.getElementById("mymodal").style.display = "none";
+	}
+	</script>
 	<body>
-		<h1 class="center">Welcome to the Keep</h1>
-			<div id="keepdiv">
-			<input type="text" id="searchInput" onkeyup="filterBySearch()" placeholder="Search here..." title="Type in a name">
-			<table id="keeptable">
-				<tr class="header">
-					<th style="width:10%">Name</th>
-					<th style="width:15%">Tags</th>
-					<th style="width:65%">Link</th>
-					<th style="width:10%"/>
+		<h1><span class="lightblue">the</span> <span class="darkgreen">Keep</span></h1>
+		<div class="button" id="button-5" onclick="openForm()">
+			<div id="translate"></div>
+			<a href="#">new</a>
+		</div>
+
+		<!-- modal add_new -->
+		<div id="mymodal" class="modal">
+			<div class="modal-content">
+				<span class="close">&times;</span>
+				<div id="registration-form">
+				<div class='fieldset'>
+					<legend><span class="lightblue">new</span> <span class="darkgreen">Entry</span></legend>
+					<form id="actual-registration-form" onsubmit="return onSubmitForm()" class="form-container" autocomplete="off">
+						<div class='row'>
+							<label for='input-name'>name</label>
+							<input type="text" class="form-control" required placeholder="name..." name="input-name" id="input-name">
+						</div>
+						<div class='row'>
+							<label for="input-link">link</label>
+							<input type="text" class="form-control" required placeholder="link..." name="input-link" id="input-link">
+						</div>
+						<div class='row'>
+							<label for="input-tags">tags</label>
+							<input type="text" placeholder="short comma separated tags (e.g mac,hw,news)" name="input-tags" id="input-tags">
+						</div>
+						<div class='row'>
+							<label for="input-pwd">password</label>
+							<input type="password" class="form-control" placeholder="password" name="input-pwd" id="input-pwd" required>
+						</div>
+						<input type="submit" value="save">
+					</form>
+				</div>
+			</div>
+			</div>
+		</div>
+		<!-- end modal add_new -->
+
+		<br/>
+		<br/>
+		<input type="text" id="searchInput" onkeyup="filterBySearch()" placeholder="search here..." title="type in a name">
+		<table id="keeptable" class="container">
+			<thead>
+				<tr>
+					<th style="width:10%"><h1>name</h1></th>
+					<th style="width:15%"><h1>tags</h1></th>
+					<th style="width:65%"><h1>link</h1></th>
+					<th style="width:10%"><h1></h1></th>
 				</tr>
+			</thead>
+			<tbody>
 				{% for key in data %}
 					<tr>
 						<td>{{ key }}</td>
 						<td>{{ data[key].tags }}</td>
-						<td><a href="{{ data[key].link }}">{{ data[key].link }}</a></td>
-						<td><button type="button" onclick="copy('{{ key }}', this)">>copy</button></td>
+						<td><a href="{{ data[key].link }}" target="_blank" rel="noopener noreferrer">{{ data[key].link }}</a></td>
+						<td>
+							<div class="button" id="button-5" onclick="copy('{{ key }}', this)">
+								<div id="translate"></div>
+								<a href="#">copy</a>
+							</div>
+						</td>
 					</tr>
 				{% endfor %}
-			</table>
-			</div>
-		</ul>
+			</tbody>
+		</table>
 	</body>
 </html>
