@@ -9,7 +9,7 @@ from flask import render_template
 from engine import crypto as cry
 from engine import storage as st
 from mykeep import _get_decrypted_dict
-from mykeep import parse_args
+import mykeep
 from engine import utils
 from engine import pwd_utils
 
@@ -33,11 +33,11 @@ def home():
 def copy():
     name = request.args['name'] if 'name' in request.args else None
 
-    global netrcfile, storagefile
-    crypto = cry.Crypto(utils.get_password(netrcfile))
-    storage = st.Storage(storagefile)
-    data_dict = _get_decrypted_dict(crypto, storage)
-    clipboard.copy(data_dict[name]['pwd']) if name in data_dict else clipboard.copy('')
+    os.environ['DPKEEP_NETRC'] = '/Users/dpomian/hardwork/pywork/dpkeep/res/prd/.netrc'
+    os.environ['DPKEEP_STORAGE'] = '/Users/dpomian/hardwork/pywork/dpkeep/res/prd/.mykeep_storage'
+
+    mykeep.parse_args(['cp', name])
+
     return jsonify({'data':'copied'})
 
 
@@ -47,12 +47,10 @@ def add_new():
     os.environ['DPKEEP_NETRC'] = '/Users/dpomian/hardwork/pywork/dpkeep/res/prd/.netrc'
     os.environ['DPKEEP_STORAGE'] = '/Users/dpomian/hardwork/pywork/dpkeep/res/prd/.mykeep_storage'
 
-    print('netrcfile: {}'.format(netrcfile))
-
     if 'name' in data and 'link' in data and 'pwd' in data:
         tags = data['tags'] if 'tags' in data else ''
         tags = ','.join(x.strip() for x in tags.split(',') if x.strip().isalnum())
-        parse_args(['add','-name',data['name'],'-link',data['link'],'-pwd',data['pwd'],'-tags',tags])
+        mykeep.parse_args(['add','-name',data['name'],'-link',data['link'],'-pwd',data['pwd'],'-tags',tags])
         return jsonify({'data':'created'})
 
     return jsonify({'data':'data is not good'})
