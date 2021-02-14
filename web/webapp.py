@@ -9,6 +9,7 @@ from flask import render_template
 from engine import crypto as cry
 from engine import storage as st
 from mykeep import _get_decrypted_dict
+from mykeep import parse_args
 from engine import utils
 from engine import pwd_utils
 
@@ -39,9 +40,32 @@ def copy():
     clipboard.copy(data_dict[name]['pwd']) if name in data_dict else clipboard.copy('')
     return jsonify({'data':'copied'})
 
+
+@app.route('/keep/api/v1/new_entry', methods=['POST'])
+def add_new():
+    data = request.json
+    os.environ['DPKEEP_NETRC'] = '/Users/dpomian/hardwork/pywork/dpkeep/res/prd/.netrc'
+    os.environ['DPKEEP_STORAGE'] = '/Users/dpomian/hardwork/pywork/dpkeep/res/prd/.mykeep_storage'
+
+    print('netrcfile: {}'.format(netrcfile))
+
+    if 'name' in data and 'link' in data and 'pwd' in data:
+        tags = data['tags'] if 'tags' in data else ''
+        tags = ','.join(x.strip() for x in tags.split(',') if x.strip().isalnum())
+        parse_args(['add','-name',data['name'],'-link',data['link'],'-pwd',data['pwd'],'-tags',tags])
+        return jsonify({'data':'created'})
+
+    return jsonify({'data':'data is not good'})
+
+
 @app.route('/keep/passgen/', methods=['GET'])
 def pass_gen():
     return render_template('passgen.html')
+
+
+@app.route('/keep/addnew/', methods=['GET'])
+def addnew():
+    return render_template('addnew.html')
 
 
 @app.route('/keep/api/v1/passgen/', methods=['GET'])

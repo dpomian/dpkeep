@@ -148,11 +148,11 @@ def generate_random_password(args):
     print('pwd: {}'.format(pwd_utils.generate_pwd()))
 
 
-def main():
+def parse_args(myargs):
     global netrcfile, storagefile
-    netrcfile = os.path.join(os.path.dirname(__file__),'res/prd/.netrc')
-    storagefile = os.path.join(os.path.dirname(__file__),'res/prd/.mykeep_storage')
-
+    netrcfile = os.environ['DPKEEP_NETRC'] if 'DPKEEP_NETRC' in os.environ else ''
+    storagefile = os.environ['DPKEEP_STORAGE'] if 'DPKEEP_STORAGE' in os.environ else ''
+    
     parser = argparse.ArgumentParser(description="Password keepr", prog="mykeep", allow_abbrev=True)
 
     subparsers = parser.add_subparsers(help='commands')
@@ -189,9 +189,16 @@ def main():
     gen_parser = subparsers.add_parser('genpwd', help="generates a random password")
     gen_parser.set_defaults(func=generate_random_password)
 
-    args = parser.parse_args()
+    args = parser.parse_args(myargs)
     if hasattr(args, 'func'):
         args.func(args)
+
+
+def main():
+    os.environ['DPKEEP_NETRC'] = os.path.join(os.path.dirname(__file__),'res/prd/.netrc')
+    os.environ['DPKEEP_STORAGE'] = os.path.join(os.path.dirname(__file__),'res/prd/.mykeep_storage')
+
+    args = parse_args(sys.argv[1:])
 
     return None
 

@@ -7,7 +7,7 @@ body {
   font-weight: 300;
   line-height: 1.42em;
   color:#A7A1AE;
-  background-color:#1F2739;
+	background-color:#364351;
 }
 
 h1 {
@@ -37,13 +37,15 @@ h2 a {
 
 .blue { color: #185875; }
 .yellow { color: #FFF842; }
-.darkgreen { color: #185875 }
+.darkgreen { color: #206789 }
+.lightblue { color: #4DC3FA }
 
 .container th h1 {
 	  font-weight: bold;
 	  font-size: 1em;
   text-align: left;
-  color: #185875;
+	text-transform: uppercase;
+  color: #206789;
 }
 
 .container td {
@@ -70,7 +72,7 @@ h2 a {
   background-position: 10px 10px;
 	background-size: 25px 25px;
   background-repeat: no-repeat;
-  background-color:#191f2e;
+	background-color:#2a3644;
 	color: #ffffff;
   width: 100%;
   font-size: 15px;
@@ -88,16 +90,16 @@ h2 a {
 
 /* Background-color of the odd rows */
 .container tr:nth-child(odd) {
-	  background-color: #323C50;
+		background-color:#2a3644;
 }
 
 /* Background-color of the even rows */
 .container tr:nth-child(even) {
-	  background-color: #2C3446;
+		background-color: #2d3c4c;
 }
 
 .container th {
-	  background-color: #2C3446;
+		background-color: #202934;
 }
 
 .container td:first-child { color: #FB667A; }
@@ -185,3 +187,22 @@ a, a:hover, a:active, a:visited {
   color: #2D3142;
 }
 
+
+#button-new {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+#button-new a {
+  position: relative;
+  transition: all .45s ease-Out;
+}
+
+#button-new:hover #translate {
+  left: 0;
+}
+
+#button-new:hover a {
+  color: #2D3142;
+}
