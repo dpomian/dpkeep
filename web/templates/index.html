@@ -4,69 +4,43 @@
 		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
 		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/add_new.css') }}">
 		<link href="https://parsleyjs.org/src/parsley.css" rel="stylesheet" />
+		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	</head>
 <style>
 </style>
-	<script type="text/javascript">
-		generateTable();
+<script type="text/javascript">
+	generateTable();
 
-		var prevButton = null;
-		function copy(name, button) {
-			$.ajax({
-				type: 'GET',
-				url: '/keep/api/v1/cp?name=' + name,
-				success: function(resp) {
-					var currentHref = button.getElementsByTagName('a')[0];
-					var origText = currentHref.innerHTML;
-					var origColor = currentHref.style.color;
-					if (prevButton != null) {
-						var prevHref = prevButton.getElementsByTagName('a')[0];
-						prevHref.innerHTML = 'copy';
-						prevHref.style.color = currentHref.style.color;
+	function filterBySearch() {
+		var td, i, tdArr, j;
+		var input = document.getElementById("searchInput");
+		var filter = input.value.toUpperCase();
+		var table = document.getElementById("keeptable");
+		var tr = table.getElementsByTagName("tr");
+
+		// Loop through all table rows
+		for (i = 1; i < tr.length; i++) {
+			tdArr = tr[i].getElementsByTagName("td");
+			// Loop through all table columns in the current row, and hide those who don't match the search query
+			var found = false;
+			for (j = 0; j < tdArr.length; j++) {
+				td = tdArr[j];
+				if (td) {
+					if (td.textContent.toUpperCase().indexOf(filter) > -1 ) {
+						found = true;
+						break;
 					}
-					prevButton = button;
-					currentHref.innerHTML = 'copied';
-					currentHref.style.color = '#00ff00';
-					setTimeout(function() { 
-						currentHref.innerHTML = origText;
-						currentHref.style.color = origColor;
-						}, 3000);
-				},
-				error: function() {
-				}
-			});
-		}
-
-		function filterBySearch() {
-			var td, i, tdArr, j;
-			var input = document.getElementById("searchInput");
-			var filter = input.value.toUpperCase();
-			var table = document.getElementById("keeptable");
-			var tr = table.getElementsByTagName("tr");
-
-			// Loop through all table rows
-			for (i = 1; i < tr.length; i++) {
-				tdArr = tr[i].getElementsByTagName("td");
-				// Loop through all table columns in the current row, and hide those who don't match the search query
-				var found = false;
-				for (j = 0; j < tdArr.length; j++) {
-					td = tdArr[j];
-					if (td) {
-						if (td.textContent.toUpperCase().indexOf(filter) > -1 ) {
-							found = true;
-							break;
-						}
-					}
-				}
-
-				if (found) {
-					tr[i].style.display = "";
-				} else {
-					tr[i].style.display = "none";
 				}
 			}
+
+			if (found) {
+				tr[i].style.display = "";
+			} else {
+				tr[i].style.display = "none";
+			}
 		}
+	}
 
 	function onSubmitForm(){
 		console.log(document.getElementById("actual-registration-form"))
@@ -104,21 +78,49 @@
 		});
 
 		document.getElementById("actual-registration-form").reset();
-		closeForm();
+		addNewDialogClose();
 
 		return false;
 	}
 
-	function openForm() {
+	function addNewDialogOpen() {
 		console.log('in openForm');
-		document.getElementById("mymodal").style.display = "block";
-		var span = document.getElementsByClassName("close")[0];
-		span.onclick = closeForm;
+		document.getElementById("add_new_modal").style.display = "block";
+		var span = document.getElementById("add-new-close-button");
+		span.onclick = addNewDialogClose;
 	}
 
-	function closeForm() {
+	function addNewDialogClose() {
 		document.getElementById("actual-registration-form").reset();
-		document.getElementById("mymodal").style.display = "none";
+		document.getElementById("add_new_modal").style.display = "none";
+	}
+
+	function confirmDeleteDialogOpen(glyph) {
+		glyphToDelete = glyph;
+		document.getElementById("confirm_delete_modal").style.display = "block";
+	}
+
+	function confirmDeleteDialogCloseNo() {
+		document.getElementById("confirm_delete_modal").style.display = "none";
+	}
+
+	function confirmDeleteDialogCloseYes() {
+		var name = $(glyphToDelete).closest('tr')[0].cells[0].innerText;
+		console.log('confirm delete ' + name);
+
+		$.ajax({
+			type: 'DELETE',
+			url: '/keep/api/v1/rm?name=' + name,
+			success: function(resp) {
+				if (resp.data === "deleted") {
+					document.getElementById("confirm_delete_modal").style.display = "none";
+					generateTable();
+				}
+			},
+			error: function() {
+			}
+		});
+		
 	}
 
 	function generateTable() {
@@ -148,27 +150,66 @@
 					cell.innerHTML = '<a href="' + table_data[i].link + '" target="_blank" rel="noopener noreferrer">'+ table_data[i].link + '</a>';
 					var cell = row.insertCell(-1);
 					cell.innerHTML = '<div class="button" id="button-5" onclick="return false"><div id="translate"></div><a href="#">edit</a></div>';
-					var cell = row.insertCell(-1);
-					cell.innerHTML = '<div class="button" id="button-5" onclick="copy(\'' + table_data[i].name + '\', this)"> <div id="translate"></div> <a href="#">copy</a></div>';
+					cell.innerHTML = '<span style="font-size: 2em; color: Grey;">\
+							<i class="fa fa-trash" onclick="confirmDeleteDialogOpen(this)"></i>\
+						</span>\
+						<span style="font-size: 2.1em; color: Grey;">\
+							<i class="fa fa-edit"></i>\
+						</span>\
+						<span style="font-size: 2em; color: Grey;">\
+							<i class="fa fa-copy" onclick="copy(this)"></i>\
+						</span>';
 				}
 			},
 			error: function() {
 			}
 		});
+	}
+	
+	function deleteForSearch(glyph) {
+		var name = $(glyph).closest('tr')[0].cells[0].innerText;
+		var kt = $("#keeptable");
+		console.log(name);
+		console.log(kt);
+	}
 
+	function copy(glyph) {
+		var name = $(glyph).closest('tr')[0].cells[0].innerText;
+		$.ajax({
+			type: 'GET',
+			url: '/keep/api/v1/cp?name=' + name,
+			success: function(resp) {
+				console.log(glyph);
+				glyph.style.color = '#00ff00';
+				glyph.onmouseover = function(){};
+				glyph.onmouseout = function(){};
+
+				setTimeout(function() { 
+					glyph.style.color = 'grey';
+					glyph.onmouseover = function() {
+						glyph.style.color = 'seagreen';
+					}
+					glyph.onmouseout = function() {
+						glyph.style.color = 'grey';
+					}
+					}, 3000);
+			},
+			error: function() {
+			}
+		});
 	}
 	</script>
 	<body>
 		<h1><span class="lightblue">the</span> <span class="darkgreen">Keep</span></h1>
-		<div class="button" id="button-5" onclick="openForm()">
+		<div class="button" id="button-5" onclick="addNewDialogOpen()">
 			<div id="translate"></div>
 			<a href="#">new</a>
 		</div>
 
 		<!-- modal add_new -->
-		<div id="mymodal" class="modal">
+		<div id="add_new_modal" class="modal">
 			<div class="modal-content">
-				<span class="close">&times;</span>
+				<span class="close" id="add-new-close-button">&times;</span>
 				<div id="registration-form">
 				<div class='fieldset'>
 					<legend><span class="lightblue">new</span> <span class="darkgreen">Entry</span></legend>
@@ -197,6 +238,20 @@
 		</div>
 		<!-- end modal add_new -->
 
+		<!-- modal confirm delete -->
+		<div id="confirm_delete_modal" class="modal">
+			<div class="modal-content">
+				<h2>confirm delete?</h2>
+				<div class="button-yesno" id="button-no" onclick="confirmDeleteDialogCloseNo()">
+					<a href="#" style="color:red">no</a>
+				</div>
+				<div class="button-yesno" id="button-yes" onclick="confirmDeleteDialogCloseYes()">
+					<a href="#" style="color:seagreen">yes</a>
+				</div>
+			</div>
+		</div>
+		<!-- end modal confirm delete -->
+
 		<br/>
 		<br/>
 		<input type="text" id="searchInput" onkeyup="filterBySearch()" placeholder="search here..." title="type in a name" autocomplete="off">
@@ -206,11 +261,9 @@
 					<th style="width:10%"><h1>name</h1></th>
 					<th style="width:15%"><h1>tags</h1></th>
 					<th style="width:65%"><h1>link</h1></th>
-					<th style="width:7%"><h1/></th>
-					<th style="width:7%"><h1/></th>
+					<th style="width:10%"><h1/>actions</th>
 				</tr>
 			</thead>
 		</table>
-
 	</body>
 </html>

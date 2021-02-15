@@ -40,6 +40,18 @@ def copy():
     return jsonify({'data':'copied'})
 
 
+@app.route('/keep/api/v1/rm', methods=['DELETE'])
+def rm():
+    name = request.args['name'] if 'name' in request.args else None
+    
+    if name:
+        os.environ['DPKEEP_NETRC'] = '/Users/dpomian/hardwork/pywork/dpkeep/res/prd/.netrc'
+        os.environ['DPKEEP_STORAGE'] = '/Users/dpomian/hardwork/pywork/dpkeep/res/prd/.mykeep_storage'
+        mykeep.parse_args(['rm',name])
+        return jsonify({'data':'deleted'})
+    return jsonify({'data':'not found'})
+
+
 @app.route('/keep/api/v1/new_entry', methods=['POST'])
 def add_new():
     data = request.json

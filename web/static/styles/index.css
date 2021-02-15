@@ -168,6 +168,43 @@ a, a:hover, a:active, a:visited {
   transition: all .45s ease-Out;
 }
 
+#button-5:hover #translate {
+  left: 0;
+}
+
+#button-5:hover a {
+  color: #2D3142;
+}
+
+.button-yesno {
+  display: inline-flex;
+  height: 40px;
+  width: 60px;
+  border: 1px solid #BFC0C0;
+  margin: 0px 0px 0px 0px;
+  color: #BFC0C0;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-size: .8em;
+  letter-spacing: 1.5px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  /*
+  position: relative;
+  cursor: pointer;
+  */
+}
+
+.button-yesno:hover a{
+  color: olive;
+}
+
+.button-yesno a {
+  position: relative;
+  transition: all .45s ease-Out;
+}
+
 #translate {
   transform: rotate(10deg);
   width: 100%;
@@ -179,13 +216,6 @@ a, a:hover, a:active, a:visited {
   transition: all .3s ease-Out;
 }
 
-#button-5:hover #translate {
-  left: 0;
-}
-
-#button-5:hover a {
-  color: #2D3142;
-}
 
 
 #button-new {
@@ -205,4 +235,14 @@ a, a:hover, a:active, a:visited {
 
 #button-new:hover a {
   color: #2D3142;
+}
+
+.fa-trash:hover {
+    color: #ff0000;
+}
+.fa-copy:hover {
+    color: seagreen;
+}
+.fa-edit:hover {
+    color: seagreen;
 }
