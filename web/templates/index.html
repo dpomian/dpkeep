@@ -9,6 +9,8 @@
 <style>
 </style>
 	<script type="text/javascript">
+		generateTable();
+
 		var prevButton = null;
 		function copy(name, button) {
 			$.ajax({
@@ -16,6 +18,8 @@
 				url: '/keep/api/v1/cp?name=' + name,
 				success: function(resp) {
 					var currentHref = button.getElementsByTagName('a')[0];
+					var origText = currentHref.innerHTML;
+					var origColor = currentHref.style.color;
 					if (prevButton != null) {
 						var prevHref = prevButton.getElementsByTagName('a')[0];
 						prevHref.innerHTML = 'copy';
@@ -24,6 +28,10 @@
 					prevButton = button;
 					currentHref.innerHTML = 'copied';
 					currentHref.style.color = '#00ff00';
+					setTimeout(function() { 
+						currentHref.innerHTML = origText;
+						currentHref.style.color = origColor;
+						}, 3000);
 				},
 				error: function() {
 				}
@@ -86,6 +94,9 @@
 			success: function(resp) {
 				console.log('success');
 				console.log(resp);
+				if(resp.data === "created") {
+					generateTable();
+				}
 			},
 			error: function() {
 				console.log('error');
@@ -108,6 +119,43 @@
 	function closeForm() {
 		document.getElementById("actual-registration-form").reset();
 		document.getElementById("mymodal").style.display = "none";
+	}
+
+	function generateTable() {
+		$.ajax({
+			type: 'GET',
+			url: '/keep/api/v1/ll',
+			success: function(resp) {
+				var table_data = resp.data;
+				console.log(table_data);
+				var mytable = document.getElementById("keeptable");
+				var newTblBody = document.createElement("tbody");
+
+				// delete existing rows
+				var count = $('#keeptable tr').length;
+				for(var i=1; i<count; i++) {
+					mytable.deleteRow(1);
+				}
+
+				// insert new rows
+				for(var i=0; i<table_data.length; i++) {
+					row = mytable.insertRow(-1);
+					var cell = row.insertCell(-1);
+					cell.innerHTML = table_data[i].name;
+					var cell = row.insertCell(-1);
+					cell.innerHTML = table_data[i].tags;
+					var cell = row.insertCell(-1);
+					cell.innerHTML = '<a href="' + table_data[i].link + '" target="_blank" rel="noopener noreferrer">'+ table_data[i].link + '</a>';
+					var cell = row.insertCell(-1);
+					cell.innerHTML = '<div class="button" id="button-5" onclick="return false"><div id="translate"></div><a href="#">edit</a></div>';
+					var cell = row.insertCell(-1);
+					cell.innerHTML = '<div class="button" id="button-5" onclick="copy(\'' + table_data[i].name + '\', this)"> <div id="translate"></div> <a href="#">copy</a></div>';
+				}
+			},
+			error: function() {
+			}
+		});
+
 	}
 	</script>
 	<body>
@@ -151,31 +199,18 @@
 
 		<br/>
 		<br/>
-		<input type="text" id="searchInput" onkeyup="filterBySearch()" placeholder="search here..." title="type in a name">
+		<input type="text" id="searchInput" onkeyup="filterBySearch()" placeholder="search here..." title="type in a name" autocomplete="off">
 		<table id="keeptable" class="container">
 			<thead>
 				<tr>
 					<th style="width:10%"><h1>name</h1></th>
 					<th style="width:15%"><h1>tags</h1></th>
 					<th style="width:65%"><h1>link</h1></th>
-					<th style="width:10%"><h1></h1></th>
+					<th style="width:7%"><h1/></th>
+					<th style="width:7%"><h1/></th>
 				</tr>
 			</thead>
-			<tbody>
-				{% for key in data %}
-					<tr>
-						<td>{{ key }}</td>
-						<td>{{ data[key].tags }}</td>
-						<td><a href="{{ data[key].link }}" target="_blank" rel="noopener noreferrer">{{ data[key].link }}</a></td>
-						<td>
-							<div class="button" id="button-5" onclick="copy('{{ key }}', this)">
-								<div id="translate"></div>
-								<a href="#">copy</a>
-							</div>
-						</td>
-					</tr>
-				{% endfor %}
-			</tbody>
 		</table>
+
 	</body>
 </html>

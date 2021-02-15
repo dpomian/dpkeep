@@ -55,6 +55,21 @@ def add_new():
     return jsonify({'data':'data is not good'})
 
 
+@app.route('/keep/api/v1/ll', methods=['GET'])
+def ll():
+    netrcfile = os.path.join(os.path.dirname(__file__),'../res/prd/.netrc')
+    storagefile = os.path.join(os.path.dirname(__file__),'../res/prd/.mykeep_storage')
+    crypto = cry.Crypto(utils.get_password(netrcfile))
+    storage = st.Storage(storagefile)
+    data_dict = _get_decrypted_dict(crypto, storage)
+
+    result = [] 
+    for key in sorted(data_dict.keys()):
+        result.append({'name': key, 'link': data_dict[key]['link'], 'tags':data_dict[key]['tags'] if 'tags' in data_dict[key] else ''})
+
+    return jsonify({'data':result})
+
+
 @app.route('/keep/passgen/', methods=['GET'])
 def pass_gen():
     return render_template('passgen.html')
