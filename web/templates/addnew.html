@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/add_new.css') }}">
+<style>
+</style>
+</head>
+<body>
+
+<h2>Popup Form</h2>
+<p>Click on the button at the bottom of this page to open the login form.</p>
+<p>Note that the button and the form is fixed - they will always be positioned to the bottom of the browser window.</p>
+
+<button class="open-button" onclick="openForm()">Open Form</button>
+
+<!-- the modal -->
+<div id="mymodal" class="modal">
+	<div class="modal-content">
+		<span class="close">&times;</span>
+		<div id="registration-form">
+		<div class='fieldset'>
+			<legend>new entry</legend>
+			<form id="actual-registration-form" onsubmit="return onSubmitForm()" class="form-container" autocomplete="off">
+				<div class='row'>
+					<label for='input-name'>name</label>
+					<input type="text" class="form-control" required placeholder="name" name="input-name" id="input-name">
+				</div>
+				<div class='row'>
+					<label for="input-link">link</label>
+					<input type="text" class="form-control" required placeholder="link" name="input-link" id="input-link">
+				</div>
+				<div class='row'>
+					<label for="input-tags">tags</label>
+					<input type="text" placeholder="comma separated tags" name="input-tags" id="input-tags">
+				</div>
+				<div class='row'>
+					<label for="input-pwd">password</label>
+					<input type="password" class="form-control" placeholder="password" name="input-pwd" id="input-pwd" required>
+				</div>
+				<input type="submit" value="save">
+			</form>
+		</div>
+	</div>
+	</div>
+</div>
+
+<script>
+function onSubmitForm(){
+  document.getElementById("actual-registration-form").reset();
+	closeForm();
+	return false;
+}
+
+function openForm() {
+	console.log('in openForm');
+  document.getElementById("mymodal").style.display = "block";
+	var span = document.getElementsByClassName("close")[0];
+	span.onclick = closeForm;
+}
+
+function closeForm() {
+  document.getElementById("actual-registration-form").reset();
+  document.getElementById("mymodal").style.display = "none";
+}
+</script>
+
+</body>
+</html>
