@@ -11,7 +11,7 @@
 <style>
 </style>
 <script type="text/javascript">
-	generateTable();
+	generateKeepTable();
 
 	function filterBySearch() {
 		var td, i, tdArr, j;
@@ -59,7 +59,7 @@
 			dataType: "json",
 			success: function(resp) {
 				if(resp.data === "created") {
-					generateTable();
+					generateKeepTable();
 				}
 			},
 			error: function() {
@@ -74,14 +74,14 @@
 	}
 
 	function addNewDialogOpen() {
-		document.getElementById("add_new_modal").style.display = "block";
+		document.getElementById("add_new_entry_modal").style.display = "block";
 		var span = document.getElementById("add-new-close-button");
 		span.onclick = addNewDialogClose;
 	}
 
 	function addNewDialogClose() {
 		document.getElementById("actual-registration-form").reset();
-		document.getElementById("add_new_modal").style.display = "none";
+		document.getElementById("add_new_entry_modal").style.display = "none";
 	}
 
 	function confirmDeleteDialogOpen(glyph) {
@@ -105,7 +105,7 @@
 			success: function(resp) {
 				if (resp.data === "deleted") {
 					document.getElementById("confirm_delete_modal").style.display = "none";
-					generateTable();
+					generateKeepTable();
 				}
 			},
 			error: function() {
@@ -114,7 +114,7 @@
 		
 	}
 
-	function generateTable() {
+	function generateKeepTable() {
 		$.ajax({
 			type: 'GET',
 			url: '/keep/api/v1/ll',
@@ -233,7 +233,7 @@
 				console.log('success');
 				console.log(resp);
 				if(resp.data === "updated") {
-					generateTable();
+					generateKeepTable();
 				}
 			},
 			error: function() {
@@ -247,13 +247,12 @@
 	</script>
 	<body>
 		<h1><span class="lightblue">the</span> <span class="darkgreen">Keep</span></h1>
-		<div class="button" id="button-5" onclick="addNewDialogOpen()">
-			<div id="translate"></div>
+		<div class="button-action button-action-positive" id="new_entry_button" onclick="addNewDialogOpen()">
 			<a href="#">new</a>
 		</div>
 
 		<!-- modal add_new -->
-		<div id="add_new_modal" class="modal">
+		<div id="add_new_entry_modal" class="modal">
 			<div class="modal-content">
 				<span class="close" id="add-new-close-button">&times;</span>
 				<div id="registration-form">
@@ -274,7 +273,7 @@
 						</div>
 						<div class='row'>
 							<label for="input-pwd">password</label>
-							<input type="password" class="form-control" placeholder="password" name="input-pwd" id="input-pwd" required>
+							<input type="password" class="form-control" placeholder="type 'random' for a randomly generated password" name="input-pwd" id="input-pwd" required>
 						</div>
 						<input type="submit" value="save">
 					</form>

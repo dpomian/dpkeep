@@ -30,9 +30,9 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  cursor: pointer;
   /*
   position: relative;
-  cursor: pointer;
   */
 }
 
