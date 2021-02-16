@@ -176,7 +176,20 @@ a, a:hover, a:active, a:visited {
   color: #2D3142;
 }
 
-.button-yesno {
+.yesno-dialog {
+  background-color: #d5d5d5;
+	background-color: #364351;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 20%;
+}
+
+.yesno-dialog h2 {
+  color: #4DC3FA;
+}
+
+.button-yes, .button-no {
   display: inline-flex;
   height: 40px;
   width: 60px;
@@ -185,7 +198,7 @@ a, a:hover, a:active, a:visited {
   color: #BFC0C0;
   text-transform: uppercase;
   text-decoration: none;
-  font-size: .8em;
+  font-size: .7em;
   letter-spacing: 1.5px;
   align-items: center;
   justify-content: center;
@@ -196,13 +209,26 @@ a, a:hover, a:active, a:visited {
   */
 }
 
-.button-yesno:hover a{
-  color: olive;
+.button-no {
+  float: left;
 }
 
-.button-yesno a {
+.button-yes {
+  float: right;
+}
+
+.button-yes:hover {
+  border-color:seagreen;
+}
+
+.button-no:hover {
+  border-color:red;
+}
+
+.button-yes a {
   position: relative;
   transition: all .45s ease-Out;
+  cursor: pointer;
 }
 
 #translate {

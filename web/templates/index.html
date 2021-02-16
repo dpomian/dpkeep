@@ -240,14 +240,16 @@
 
 		<!-- modal confirm delete -->
 		<div id="confirm_delete_modal" class="modal">
-			<div class="modal-content">
-				<h2>confirm delete?</h2>
-				<div class="button-yesno" id="button-no" onclick="confirmDeleteDialogCloseNo()">
+			<div class="yesno-dialog">
+				<h2>confirm <span style="color:#FB667A">delete?</span></h2>
+				<div class="button-no" id="button-no" onclick="confirmDeleteDialogCloseNo()">
 					<a href="#" style="color:red">no</a>
 				</div>
-				<div class="button-yesno" id="button-yes" onclick="confirmDeleteDialogCloseYes()">
+				<div class="button-yes" id="button-yes" onclick="confirmDeleteDialogCloseYes()">
 					<a href="#" style="color:seagreen">yes</a>
 				</div>
+				<br/>
+				<br/>
 			</div>
 		</div>
 		<!-- end modal confirm delete -->
