@@ -198,7 +198,7 @@ def main():
     os.environ['DPKEEP_NETRC'] = os.path.join(os.path.dirname(__file__),'res/prd/.netrc')
     os.environ['DPKEEP_STORAGE'] = os.path.join(os.path.dirname(__file__),'res/prd/.mykeep_storage')
 
-    args = parse_args(sys.argv[1:])
+    parse_args(sys.argv[1:])
 
     return None
 
@@ -216,7 +216,6 @@ class MyKeepTest(unittest.TestCase):
     def test_encrypt(self):
         pwd = utils.get_password("./res/test/.netrc")
         crypto = cry.Crypto(pwd)
-        expected = "aaa"
         encrypted = crypto.encrypt("abcdef")
         decrypted = crypto.decrypt(encrypted)
         self.assertEqual(b"abcdef", decrypted)
@@ -233,7 +232,7 @@ class MyKeepTest(unittest.TestCase):
 
     def test_add_entry_success(self):
         existing = {'l1': {'link':'google.com', 'pwd':'secretpwd', 'tags':'t1,t2'}}
-        expected = {'l1': {'link':'google.com', 'pwd':'secretpwd', 'tags':'t1,t2'},'l2': {'link':'google.com', 'pwd':'secretpwd', 'tags':'t1,t2'}}
+        expected = {'l1': {'link':'google.com', 'pwd':'secretpwd', 'tags':'t1,t2'},'l2': {'link':'http://google.com', 'pwd':'secretpwd', 'tags':'t1,t2'}}
         self.assertDictEqual(expected, model.Model().add_entry(existing, name='l2', link='google.com', pwd='secretpwd', tags='t1,t2'))
 
     def test_remove_entry_inexisting_name(self):

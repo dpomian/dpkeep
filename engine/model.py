@@ -13,6 +13,8 @@ class Model:
 
         if link is None or pwd is None or name is None:
             raise ValueError('attributes cannot be empty')
+        if not link.startswith('http://') and not link.startswith('https://'):
+            link = 'http://{}'.format(link)
 
         if name in data_dict:
             raise ValueError("name already exists")
