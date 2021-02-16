@@ -43,7 +43,6 @@
 	}
 
 	function onSubmitForm(){
-		console.log(document.getElementById("actual-registration-form"))
 		var nameVal = document.getElementsByName("input-name")[0].value;
 		var linkVal = document.getElementsByName("input-link")[0].value;
 		var tagsVal = document.getElementsByName("input-tags")[0].value;
@@ -154,7 +153,7 @@
 							<i class="fa fa-trash" onclick="confirmDeleteDialogOpen(this)"></i>\
 						</span>\
 						<span style="font-size: 2.1em; color: Grey;">\
-							<i class="fa fa-edit"></i>\
+							<i class="fa fa-edit" onclick="editEntryDialogOpen(this)"></i>\
 						</span>\
 						<span style="font-size: 2em; color: Grey;">\
 							<i class="fa fa-copy" onclick="copy(this)"></i>\
@@ -198,6 +197,61 @@
 			}
 		});
 	}
+
+	function editEntryDialogOpen(glyph) {
+		console.log(glyph);
+		var aTableRow = $(glyph).closest('tr')[0];
+
+		var formElements = document.getElementById("edit-entry-modal-form").elements;
+		formElements["input-name"].value = aTableRow.cells[0].innerText;
+		formElements["input-tags"].value = aTableRow.cells[1].innerText;
+		formElements["input-link"].value = aTableRow.cells[2].innerText;
+
+		document.getElementById("edit_entry_modal").style.display = "block";
+		var span = document.getElementById("edit-entry-close-button");
+		span.onclick = editEntryDialogClose;
+	}
+
+	function editEntryDialogClose() {
+		document.getElementById("edit-entry-modal-form").reset();
+		document.getElementById("edit_entry_modal").style.display = "none";
+	}
+
+	function onEditEntryModalFormSubmit() {
+		console.log(document.getElementById("edit-entry-modal-form"))
+		var formElements = document.getElementById("edit-entry-modal-form").elements;
+		var nameVal = formElements["input-name"].value;
+		var tagsVal = formElements["input-tags"].value;
+		var linkVal = formElements["input-link"].value;
+		var pwdVal = formElements["input-pwd"].value;
+		var data = {
+			"name": nameVal,
+			"link": linkVal,
+			"tags": tagsVal,
+			"pwd": pwdVal
+		}
+
+		$.ajax({
+			type: 'PUT',
+			url: '/keep/api/v1/update_entry' + name,
+			data: JSON.stringify(data),
+			contentType: "application/json; charset=utf-8",
+			dataType: "json",
+			success: function(resp) {
+				console.log('success');
+				console.log(resp);
+				if(resp.data === "updated") {
+					generateTable();
+				}
+			},
+			error: function() {
+				console.log('error');
+			}
+		});
+		editEntryDialogClose();
+		return false;
+	}
+
 	</script>
 	<body>
 		<h1><span class="lightblue">the</span> <span class="darkgreen">Keep</span></h1>
@@ -253,6 +307,38 @@
 			</div>
 		</div>
 		<!-- end modal confirm delete -->
+
+		<!-- modal edit record -->
+		<div id="edit_entry_modal" class="modal">
+			<div class="modal-content">
+				<span class="close" id="edit-entry-close-button">&times;</span>
+				<div id="registration-form">
+				<div class='fieldset'>
+					<legend><span class="lightblue">edit</span> <span class="darkgreen">Entry</span></legend>
+					<form id="edit-entry-modal-form" onsubmit="return onEditEntryModalFormSubmit()" class="form-container" autocomplete="off">
+						<div class='row'>
+							<label for='input-name'>name</label>
+							<input type="text" class="form-control" required placeholder="name..." name="input-name" id="input-name" disabled>
+						</div>
+						<div class='row'>
+							<label for="input-link">link</label>
+							<input type="text" class="form-control" required placeholder="link..." name="input-link" id="input-link">
+						</div>
+						<div class='row'>
+							<label for="input-tags">tags</label>
+							<input type="text" placeholder="short comma separated tags (e.g mac,hw,news)" name="input-tags" id="input-tags">
+						</div>
+						<div class='row'>
+							<label for="input-pwd">password</label>
+							<input type="password" class="form-control" placeholder="leave this empty if you don't want to change it" name="input-pwd" id="input-pwd">
+						</div>
+						<input type="submit" value="save">
+					</form>
+				</div>
+			</div>
+			</div>
+		</div>
+		<!-- end modal edit record -->
 
 		<br/>
 		<br/>

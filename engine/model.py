@@ -37,11 +37,11 @@ class Model:
         if 'name' in kwargs and kwargs['name'] is not None:
             name = kwargs['name']
         if name and name in data_dict:
-            if 'link' in kwargs and kwargs['link'] is not None:
+            if 'link' in kwargs and kwargs['link']:
                 data_dict[name]['link'] = kwargs['link']
-            if 'pwd' in kwargs and kwargs['pwd'] is not None:
+            if 'pwd' in kwargs and kwargs['pwd']:
                 data_dict[name]['pwd'] = kwargs['pwd']
-            if 'tags' in kwargs and kwargs['tags'] is not None:
+            if 'tags' in kwargs and kwargs['tags']:
                 data_dict[name]['tags'] = kwargs['tags']
         return data_dict
 

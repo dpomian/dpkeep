@@ -67,6 +67,18 @@ def add_new():
     return jsonify({'data':'data is not good'})
 
 
+@app.route('/keep/api/v1/update_entry', methods=['PUT'])
+def update_entry():
+    data = request.json
+    print('update data: {}'.format(data))
+    
+    os.environ['DPKEEP_NETRC'] = '/Users/dpomian/hardwork/pywork/dpkeep/res/prd/.netrc'
+    os.environ['DPKEEP_STORAGE'] = '/Users/dpomian/hardwork/pywork/dpkeep/res/prd/.mykeep_storage'
+    mykeep.parse_args(['up', '-link', data['link'], '-pwd', data['pwd'], '-tags', data['tags'], data['name']])
+
+    return jsonify({'data':'updated'})
+
+
 @app.route('/keep/api/v1/ll', methods=['GET'])
 def ll():
     netrcfile = os.path.join(os.path.dirname(__file__),'../res/prd/.netrc')

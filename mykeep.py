@@ -256,7 +256,7 @@ class MyKeepTest(unittest.TestCase):
     def test_update_link(self):
         existing = {'l1': {'link':'gooogle.com', 'pwd':'secretpwd', 'tags':'t1,t2'}}
         expected = {'l1': {'link':'google.com', 'pwd':'secretpwd', 'tags':'t1,t2'}}
-        actual = model.Model().update_entry(existing, name='l1', link='google.com')
+        actual = model.Model().update_entry(existing, name='l1', link='google.com', pwd='')
         self.assertDictEqual(expected, actual)
 
     def test_update_pwd(self):
