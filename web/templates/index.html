@@ -15,9 +15,9 @@
 
 	function filterBySearch() {
 		var td, i, tdArr, j;
-		var input = document.getElementById("searchInput");
+		var input = $("#searchInput")[0];
 		var filter = input.value.toUpperCase();
-		var table = document.getElementById("keeptable");
+		var table = $("#keeptable")[0];
 		var tr = table.getElementsByTagName("tr");
 
 		// Loop through all table rows
@@ -45,10 +45,11 @@
 
 	function onAddNewEntryFormSubmit(){
 		var data = {
-			"name": document.getElementsByName("input-name")[0].value,
-			"link": document.getElementsByName("input-link")[0].value,
-			"tags": document.getElementsByName("input-tags")[0].value,
-			"pwd": document.getElementsByName("input-pwd")[0].value
+			
+			"name": $('[name="input-name"]')[0].value,
+			"link": $('[name="input-link"]')[0].value,
+			"tags": $('[name="input-tags"]')[0].value,
+			"pwd": $('[name="input-pwd"]')[0].value
 		}
 
 		$.ajax({
@@ -67,44 +68,43 @@
 			}
 		});
 
-		document.getElementById("actual-registration-form").reset();
+		$("#actual-registration-form")[0].reset();
 		addNewDialogClose();
 
 		return false;
 	}
 
 	function addNewDialogOpen() {
-		document.getElementById("add_new_entry_modal").style.display = "block";
-		var span = document.getElementById("add-new-close-button");
+		$("#add_new_entry_modal")[0].style.display = "block";
+		var span = $("#add-new-close-button")[0];
 		span.onclick = addNewDialogClose;
 	}
 
 	function addNewDialogClose() {
-		document.getElementById("actual-registration-form").reset();
-		document.getElementById("add_new_entry_modal").style.display = "none";
+		$("#actual-registration-form")[0].reset();
+		$("#add_new_entry_modal")[0].style.display = "none";
 	}
 
 	function confirmDeleteDialogOpen(glyph) {
 		glyphToDelete = glyph;
 		var name = $(glyphToDelete).closest('tr')[0].cells[0].innerText;
-		document.getElementById("name-to-confirm-delete").innerText = "'" + name + "'";
-		document.getElementById("confirm_delete_modal").style.display = "block";
+		$("#name-to-confirm-delete")[0].innerText = "'" + name + "'";
+		$("#confirm_delete_modal")[0].style.display = "block";
 	}
 
 	function confirmDeleteDialogCloseNo() {
-		document.getElementById("confirm_delete_modal").style.display = "none";
+		$("#confirm_delete_modal")[0].style.display = "none";
 	}
 
 	function confirmDeleteDialogCloseYes() {
 		var name = $(glyphToDelete).closest('tr')[0].cells[0].innerText;
-		console.log('confirm delete ' + name);
 
 		$.ajax({
 			type: 'DELETE',
 			url: '/keep/api/v1/rm?name=' + name,
 			success: function(resp) {
 				if (resp.data === "deleted") {
-					document.getElementById("confirm_delete_modal").style.display = "none";
+					$("#confirm_delete_modal")[0].style.display = "none";
 					generateKeepTable();
 				}
 			},
@@ -121,7 +121,7 @@
 			success: function(resp) {
 				var table_data = resp.data;
 				console.log(table_data);
-				var mytable = document.getElementById("keeptable");
+				var mytable = $("#keeptable")[0];
 				var newTblBody = document.createElement("tbody");
 
 				// delete existing rows
@@ -157,13 +157,6 @@
 		});
 	}
 	
-	function deleteForSearch(glyph) {
-		var name = $(glyph).closest('tr')[0].cells[0].innerText;
-		var kt = $("#keeptable");
-		console.log(name);
-		console.log(kt);
-	}
-
 	function copy(glyph) {
 		var name = $(glyph).closest('tr')[0].cells[0].innerText;
 		$.ajax({
@@ -194,33 +187,27 @@
 		console.log(glyph);
 		var aTableRow = $(glyph).closest('tr')[0];
 
-		var formElements = document.getElementById("edit-entry-modal-form").elements;
+		var formElements = $("#edit-entry-modal-form")[0].elements;
 		formElements["input-name"].value = aTableRow.cells[0].innerText;
 		formElements["input-tags"].value = aTableRow.cells[1].innerText;
 		formElements["input-link"].value = aTableRow.cells[2].innerText;
 
-		document.getElementById("edit_entry_modal").style.display = "block";
-		var span = document.getElementById("edit-entry-close-button");
-		span.onclick = editEntryDialogClose;
+		$("#edit_entry_modal")[0].style.display = "block";
+		$("#edit-entry-close-button")[0].onclick = editEntryDialogClose;
 	}
 
 	function editEntryDialogClose() {
-		document.getElementById("edit-entry-modal-form").reset();
-		document.getElementById("edit_entry_modal").style.display = "none";
+		$("#edit-entry-modal-form")[0].reset();
+		$("#edit_entry_modal")[0].style.display = "none";
 	}
 
 	function onEditEntryModalFormSubmit() {
-		console.log(document.getElementById("edit-entry-modal-form"))
-		var formElements = document.getElementById("edit-entry-modal-form").elements;
-		var nameVal = formElements["input-name"].value;
-		var tagsVal = formElements["input-tags"].value;
-		var linkVal = formElements["input-link"].value;
-		var pwdVal = formElements["input-pwd"].value;
+		var formElements = $("#edit-entry-modal-form")[0].elements;
 		var data = {
-			"name": nameVal,
-			"link": linkVal,
-			"tags": tagsVal,
-			"pwd": pwdVal
+			"name": formElements["input-name"].value,
+			"link": formElements["input-tags"].value,
+			"tags": formElements["input-link"].value,
+			"pwd": formElements["input-pwd"].value
 		}
 
 		$.ajax({
@@ -231,7 +218,6 @@
 			dataType: "json",
 			success: function(resp) {
 				console.log('success');
-				console.log(resp);
 				if(resp.data === "updated") {
 					generateKeepTable();
 				}

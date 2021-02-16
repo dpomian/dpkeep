@@ -217,6 +217,7 @@ a, a:hover, a:active, a:visited {
 
 .fa-trash:hover {
     color: #ff0000;
+    cursor: pointer;
 }
 .fa-copy:hover {
     color: seagreen;
