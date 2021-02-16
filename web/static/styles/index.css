@@ -176,61 +176,6 @@ a, a:hover, a:active, a:visited {
   color: #2D3142;
 }
 
-.yesno-dialog {
-  background-color: #d5d5d5;
-	background-color: #364351;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 20%;
-}
-
-.yesno-dialog h2 {
-  color: #4DC3FA;
-}
-
-.button-yes, .button-no {
-  display: inline-flex;
-  height: 40px;
-  width: 60px;
-  border: 1px solid #BFC0C0;
-  margin: 0px 0px 0px 0px;
-  color: #BFC0C0;
-  text-transform: uppercase;
-  text-decoration: none;
-  font-size: .7em;
-  letter-spacing: 1.5px;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  /*
-  position: relative;
-  cursor: pointer;
-  */
-}
-
-.button-no {
-  float: left;
-}
-
-.button-yes {
-  float: right;
-}
-
-.button-yes:hover {
-  border-color:seagreen;
-}
-
-.button-no:hover {
-  border-color:red;
-}
-
-.button-yes a {
-  position: relative;
-  transition: all .45s ease-Out;
-  cursor: pointer;
-}
-
 #translate {
   transform: rotate(10deg);
   width: 100%;
@@ -241,8 +186,6 @@ a, a:hover, a:active, a:visited {
   position: absolute;
   transition: all .3s ease-Out;
 }
-
-
 
 #button-new {
   position: relative;
