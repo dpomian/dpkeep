@@ -120,7 +120,6 @@
 			url: '/keep/api/v1/ll',
 			success: function(resp) {
 				var table_data = resp.data;
-				console.log(table_data);
 				var mytable = $("#keeptable")[0];
 				var newTblBody = document.createElement("tbody");
 
@@ -163,7 +162,6 @@
 			type: 'GET',
 			url: '/keep/api/v1/cp?name=' + name,
 			success: function(resp) {
-				console.log(glyph);
 				glyph.style.color = '#00ff00';
 				glyph.onmouseover = function(){};
 				glyph.onmouseout = function(){};
@@ -184,7 +182,6 @@
 	}
 
 	function editEntryDialogOpen(glyph) {
-		console.log(glyph);
 		var aTableRow = $(glyph).closest('tr')[0];
 
 		var formElements = $("#edit-entry-modal-form")[0].elements;
