@@ -142,13 +142,13 @@
 					var cell = row.insertCell(-1);
 					cell.innerHTML = '<div class="button" id="button-5" onclick="return false"><div id="translate"></div><a href="#">edit</a></div>';
 					cell.innerHTML = '<span style="font-size: 2em; color: Grey;">\
-							<i class="fa fa-trash" onclick="confirmDeleteDialogOpen(this)"></i>\
+							<i class="fa fa-trash" onclick="confirmDeleteDialogOpen(this)" title="delete"></i>\
 						</span>\
 						<span style="font-size: 2.1em; color: Grey;">\
-							<i class="fa fa-edit" onclick="editEntryDialogOpen(this)"></i>\
+							<i class="fa fa-edit" onclick="editEntryDialogOpen(this)" title="edit"></i>\
 						</span>\
 						<span style="font-size: 2em; color: Grey;">\
-							<i class="fa fa-copy" onclick="copy(this)"></i>\
+							<i class="fa fa-copy" onclick="copy(this)" title="copy"></i>\
 						</span>';
 				}
 			},
@@ -247,7 +247,7 @@
 	</script>
 	<body>
 		<h1><span class="lightblue">the</span> <span class="darkgreen">Keep</span></h1>
-		<div class="button-action button-action-positive" id="new_entry_button" onclick="addNewDialogOpen()">
+		<div class="button-action button-action-positive" id="new_entry_button" title="add new entry" onclick="addNewDialogOpen()">
 			<a href="#">new</a>
 		</div>
 
