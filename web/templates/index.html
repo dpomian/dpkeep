@@ -4,9 +4,11 @@
 		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
 		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/add_new.css') }}">
 		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/yesnodialog.css') }}">
+		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/qrcodedialog.css') }}">
 		<link href="https://parsleyjs.org/src/parsley.css" rel="stylesheet" />
 		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/130527/qrcode.js"></script>
 	</head>
 <style>
 </style>
@@ -76,6 +78,7 @@
 
 	function addNewDialogOpen() {
 		$("#add_new_entry_modal")[0].style.display = "block";
+		$('#add_new_entry_modal').find('#input-name').focus();
 		var span = $("#add-new-close-button")[0];
 		span.onclick = addNewDialogClose;
 	}
@@ -148,6 +151,9 @@
 						</span>\
 						<span style="font-size: 2em; color: Grey;">\
 							<i class="fa fa-copy" onclick="copy(this)" title="copy"></i>\
+						</span>\
+						<span style="font-size: 2em; color: Grey;">\
+							<i class="fa fa-qrcode" onclick="qrcodeDialogOpen(this)" title="qr code"></i>\
 						</span>';
 				}
 			},
@@ -227,6 +233,31 @@
 		return false;
 	}
 
+	function qrcodeDialogOpen(glyph) {
+		var name = $(glyph).closest('tr')[0].cells[0].innerText;
+		console.log(name);
+		$.ajax({
+			type: 'GET',
+			url: '/keep/api/v1/genqr?name=' + name,
+			success: function(resp) {
+				if(resp.data.result === 'success') {
+					$('#qrcode-img').attr('src', `data:image/png;base64,${resp.data.bin}`);
+					console.log($('#qrcode-img')[0]);
+					// show modal
+					$("#qrcode_modal")[0].style.display = "block";
+					$("#qrcode-modal-close-button")[0].onclick = qrcodeDialogClose;
+				}
+			},
+			error: function() {
+			}
+		});
+
+	}
+
+	function qrcodeDialogClose() {
+		$("#qrcode_modal")[0].style.display = "none";
+	}
+
 	</script>
 	<body>
 		<h1><span class="lightblue">the</span> <span class="darkgreen">Keep</span></h1>
@@ -269,7 +300,7 @@
 		<!-- modal confirm delete -->
 		<div id="confirm_delete_modal" class="modal">
 			<div class="yesno-dialog">
-				<h2>confirm <span style="color:#FB667A">delete?</span></h2>
+				<div class="modal-title"><span class="lightblue">confirm</span> <span style="color: #FB667A">Delete</span></div>
 				<h3 id="name-to-confirm-delete"></h3>
 				<br/>
 				<div class="button-no" id="button-no" onclick="confirmDeleteDialogCloseNo()">
@@ -316,6 +347,19 @@
 		</div>
 		<!-- end modal edit record -->
 
+		<!-- qrcode modal -->
+		<div id="qrcode_modal" class="modal">
+			<div class="qrcode-dialog">
+				<span class="close" id="qrcode-modal-close-button">&times;</span>
+				<div class="modal-title"><span class="lightblue">qr</span> <span class="darkgreen">Code</span></div>
+				<div class="qrcode-div" id="qrcode-div">
+					<img id="qrcode-img" src="" alt=""/>
+				</div>
+				<!-- <div id="qrcode"></div> -->
+			</div>
+		</div>
+		<!-- end qrcode modal -->
+
 		<br/>
 		<br/>
 		<!-- search bar -->
@@ -330,8 +374,8 @@
 				<tr>
 					<th style="width:10%"><h1>name</h1></th>
 					<th style="width:15%"><h1>tags</h1></th>
-					<th style="width:65%"><h1>link</h1></th>
-					<th style="width:10%"><h1/>actions</th>
+					<th style="width:64%"><h1>link</h1></th>
+					<th style="width:11%"><h1/>actions</th>
 				</tr>
 			</thead>
 		</table>

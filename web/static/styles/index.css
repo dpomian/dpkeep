@@ -49,22 +49,22 @@ h2 a {
 }
 
 .container td {
-	  font-weight: normal;
-	  font-size: .8em;
-		word-wrap:break-word;
+  font-weight: normal;
+  font-size: .8em;
+  word-wrap:break-word;
   -webkit-box-shadow: 0 2px 2px -2px #0E1119;
-	   -moz-box-shadow: 0 2px 2px -2px #0E1119;
-	        box-shadow: 0 2px 2px -2px #0E1119;
+  -moz-box-shadow: 0 2px 2px -2px #0E1119;
+  box-shadow: 0 2px 2px -2px #0E1119;
 }
 
 .container {
-	text-align: left;
-	overflow: hidden;
-	width: 100%;
-	margin: 0 auto;
+  text-align: left;
+  overflow: hidden;
+  width: 100%;
+  margin: 0 auto;
   display: table;
   padding: 0 0 8em 0;
-	table-layout: fixed;
+  table-layout: fixed;
 }
 
 #searchInput {
@@ -83,8 +83,8 @@ h2 a {
 }
 
 .container td, .container th {
-	  padding-bottom: 1%;
-	  padding-top: 1%;
+  padding-bottom: 1%;
+  padding-top: 1%;
   padding-left: 1.5%;  
 }
 
@@ -224,6 +224,10 @@ a, a:hover, a:active, a:visited {
     cursor: pointer;
 }
 .fa-edit:hover {
+    color: seagreen;
+    cursor: pointer;
+}
+.fa-qrcode:hover {
     color: seagreen;
     cursor: pointer;
 }

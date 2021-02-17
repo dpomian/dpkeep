@@ -1,0 +1,39 @@
+.qrcode-dialog {
+    background-color: #364351;
+    margin: auto;
+    padding: 25px;
+    border: 1px solid #888;
+    width: 25%;
+    height: 360px;
+}
+
+.qrcode-dialog h2 {
+  color: #4DC3FA;
+  font-size: 16px;
+}
+
+.qrcode-dialog img {
+  height: auto;
+  width: 200px;
+  margin: 0 auto;
+  position: relative; 
+}
+
+.qrcode-dialog .qrcode-div{
+  height: auto;
+  width: 200px;
+  margin: 0 auto;
+  top: 30px;
+  position: relative; 
+}
+
+.qrcode-dialog .modal-title {
+  font-size: 2em;
+  height: auto;
+  width: 144px;
+  margin: 0 auto;
+  padding: 15px;
+  position: relative;
+  top: 10px;
+  bottom: 15px;
+}

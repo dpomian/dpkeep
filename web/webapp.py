@@ -2,16 +2,22 @@ import sys
 sys.path.append('..')
 
 import os
+import io
 import flask
 import clipboard
 from flask import request, jsonify
 from flask import render_template
+from flask import make_response
+from flask import send_file
 from engine import crypto as cry
 from engine import storage as st
 from mykeep import _get_decrypted_dict
 import mykeep
 from engine import utils
 from engine import pwd_utils
+import qrcode
+import random
+import base64
 
 #app = flask.Flask(__name__, template_folder='web/templates')
 app = flask.Flask(__name__)
@@ -109,5 +115,37 @@ def pass_gen_api():
     pwd = pwd_utils.generate_pwd()
     clipboard.copy(pwd)
     return jsonify({'data':{'pwd':pwd}})
+
+
+@app.route('/keep/api/v1/genqr/', methods=['GET'])
+def generate_qr_img():
+    name = request.args['name'] if 'name' in request.args else None
+
+    netrcfile = os.path.join(os.path.dirname(__file__),'../res/prd/.netrc')
+    storagefile = os.path.join(os.path.dirname(__file__),'../res/prd/.mykeep_storage')
+    crypto = cry.Crypto(utils.get_password(netrcfile))
+    storage = st.Storage(storagefile)
+    data_dict = _get_decrypted_dict(crypto, storage)
+
+    if name in data_dict:
+        img = qrcode.make(data_dict[name]['pwd'])
+        tmp_qr = 'static/styles/tempqr.png'
+        img.save(tmp_qr)
+        with open(tmp_qr, 'rb') as ifile:
+            data = ifile.read()
+        os.remove(tmp_qr)
+
+        if len(data):
+            image_binary = data
+            encoded = base64.b64encode(image_binary)
+            return jsonify({'data':{'result':'success', 'bin': io.BytesIO(encoded).getvalue().decode()}})
+
+    return jsonify({'data':{'result':'fail'}})
+
+
+@app.route('/keep/qr/', methods=['GET'])
+def generate_qr():
+    return render_template('qr.html')
+
 
 app.run()

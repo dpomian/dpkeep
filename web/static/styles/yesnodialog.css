@@ -5,10 +5,12 @@
   padding: 25px;
   border: 1px solid #888;
   width: 25%;
+  height: 230px;
 }
 
 .yesno-dialog h2 {
   color: #4DC3FA;
+  font-size: 16px;
 }
 
 .yesno-dialog h3 {
@@ -56,4 +58,15 @@
   position: relative;
   transition: all .45s ease-Out;
   cursor: pointer;
+}
+
+.yesno-dialog .modal-title {
+  font-size: 1.7em;
+  height: auto;
+  width: 208px;
+  margin: 0 auto;
+  padding: 15px;
+  position: relative;
+  top: 10px;
+  bottom: 15px;
 }
