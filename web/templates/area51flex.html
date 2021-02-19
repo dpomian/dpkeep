@@ -1,0 +1,45 @@
+<html lang="EN">
+<head>
+    <title>try</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mypp_degub.css') }}">
+</head>
+<style>
+</style>
+<script>
+</script>
+
+<body>
+    <div class="dppopup">
+        <div class="ppheader">
+            <h2>title</h2>
+            <div class="closediv unselectable">X</div>
+        </div>
+        <div class="ppformwrapper">
+            <form action="none" class="reg-form">
+                <div class="reg-form-row">
+                    <label for="name">Name</label>
+                    <input name="name" type="text" autocomplete="off" required/>
+                </div>
+                <div class="reg-form-row">
+                    <label for="link">Link</label>
+                    <input name="link" type="text" autocomplete="off" required/>
+                </div>
+                <div class="reg-form-row">
+                    <label for="tags">Tags</label>
+                    <input name="tags" type="text" autocomplete="off"/>
+                </div>
+                <div class="reg-form-row">
+                    <label for="pwd">Password</label>
+                    <input name="pwd" type="password" autocomplete="off" required/>
+                    <div class="pwd-show">
+                        <label class="unselectable">hide</label>
+                    </div>
+                </div>
+                <div class="reg-form-submit">
+                    <input type="submit" value="save">
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

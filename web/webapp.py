@@ -143,9 +143,10 @@ def generate_qr_img():
     return jsonify({'data':{'result':'fail'}})
 
 
-@app.route('/keep/qr/', methods=['GET'])
-def generate_qr():
-    return render_template('qr.html')
+@app.route('/keep/area51/popup', methods=['GET'])
+def area51_popup():
+    # return render_template('area51popup.html')
+    return render_template('area51qrpopup.html')
 
 
 app.run()

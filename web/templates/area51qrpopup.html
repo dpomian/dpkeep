@@ -1,0 +1,24 @@
+<html lang="EN">
+<head>
+    <title>try</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mypp_debug.css') }}">
+</head>
+<style>
+</style>
+<script>
+</script>
+
+<body>
+    <div class="dppopup">
+        <div class="ppheader">
+            <label class="pptitle">QR Code</label>
+            <div class="closediv unselectable">X</div>
+        </div>
+        <div class="ppqrcodewrapper">
+            <div class="qrcode-div">
+                <img id="qrcode-img" src="{{ url_for ('static', filename='styles/qrcode.png') }}" alt=""/>
+            </div>
+        </div>
+    </div>	
+</body>
+</html>

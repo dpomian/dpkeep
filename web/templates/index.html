@@ -5,6 +5,7 @@
 		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/add_new.css') }}">
 		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/yesnodialog.css') }}">
 		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/qrcodedialog.css') }}">
+		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mypp_orange_white.css') }}">
 		<link href="https://parsleyjs.org/src/parsley.css" rel="stylesheet" />
 		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -13,7 +14,6 @@
 <style>
 </style>
 <script type="text/javascript">
-	generateKeepTable();
 
 	function filterBySearch() {
 		var td, i, tdArr, j;
@@ -46,12 +46,12 @@
 	}
 
 	function onAddNewEntryFormSubmit(){
+		console.log("onAddNewEntryFormSubmit");
 		var data = {
-			
-			"name": $('[name="input-name"]')[0].value,
-			"link": $('[name="input-link"]')[0].value,
-			"tags": $('[name="input-tags"]')[0].value,
-			"pwd": $('[name="input-pwd"]')[0].value
+			"name": $('#add_new_entry_modal [name="name"]')[0].value,
+			"link": $('#add_new_entry_modal [name="link"]')[0].value,
+			"tags": $('#add_new_entry_modal [name="tags"]')[0].value,
+			"pwd": $('#add_new_entry_modal [name="pwd"]')[0].value
 		}
 
 		$.ajax({
@@ -70,7 +70,7 @@
 			}
 		});
 
-		$("#actual-registration-form")[0].reset();
+		$("#add_new_entry_modal .reg-form")[0].reset();
 		addNewDialogClose();
 
 		return false;
@@ -78,13 +78,12 @@
 
 	function addNewDialogOpen() {
 		$("#add_new_entry_modal")[0].style.display = "block";
-		$('#add_new_entry_modal').find('#input-name').focus();
-		var span = $("#add-new-close-button")[0];
-		span.onclick = addNewDialogClose;
+		$('#add_new_entry_modal [name="name"]').focus();
+		$("#add_new_entry_modal .closediv")[0].onclick = addNewDialogClose;
 	}
 
 	function addNewDialogClose() {
-		$("#actual-registration-form")[0].reset();
+		$("#add_new_entry_modal .reg-form")[0].reset();
 		$("#add_new_entry_modal")[0].style.display = "none";
 	}
 
@@ -190,27 +189,29 @@
 	function editEntryDialogOpen(glyph) {
 		var aTableRow = $(glyph).closest('tr')[0];
 
-		var formElements = $("#edit-entry-modal-form")[0].elements;
-		formElements["input-name"].value = aTableRow.cells[0].innerText;
-		formElements["input-tags"].value = aTableRow.cells[1].innerText;
-		formElements["input-link"].value = aTableRow.cells[2].innerText;
+		var formElements = $("#edit_entry_modal .reg-form")[0].elements;
+		formElements["name"].value = aTableRow.cells[0].innerText;
+		formElements["tags"].value = aTableRow.cells[1].innerText;
+		formElements["link"].value = aTableRow.cells[2].innerText;
+
 
 		$("#edit_entry_modal")[0].style.display = "block";
-		$("#edit-entry-close-button")[0].onclick = editEntryDialogClose;
+		$("#edit_entry_modal .reg-form [name='name']").focus();
+		$("#edit_entry_modal .closediv")[0].onclick = editEntryDialogClose;
 	}
 
 	function editEntryDialogClose() {
-		$("#edit-entry-modal-form")[0].reset();
+		$("#edit_entry_modal .reg-form")[0].reset();
 		$("#edit_entry_modal")[0].style.display = "none";
 	}
 
 	function onEditEntryModalFormSubmit() {
-		var formElements = $("#edit-entry-modal-form")[0].elements;
+		var formElements = $("#edit_entry_modal .reg-form")[0].elements;
 		var data = {
-			"name": formElements["input-name"].value,
-			"link": formElements["input-tags"].value,
-			"tags": formElements["input-link"].value,
-			"pwd": formElements["input-pwd"].value
+			"name": formElements["name"].value,
+			"link": formElements["link"].value,
+			"tags": formElements["tags"].value,
+			"pwd": formElements["pwd"].value
 		}
 
 		$.ajax({
@@ -241,11 +242,10 @@
 			url: '/keep/api/v1/genqr?name=' + name,
 			success: function(resp) {
 				if(resp.data.result === 'success') {
-					$('#qrcode-img').attr('src', `data:image/png;base64,${resp.data.bin}`);
-					console.log($('#qrcode-img')[0]);
+					$('#qrcode_modal .qrcode-img').attr('src', `data:image/png;base64,${resp.data.bin}`);
+
 					// show modal
 					$("#qrcode_modal")[0].style.display = "block";
-					$("#qrcode-modal-close-button")[0].onclick = qrcodeDialogClose;
 				}
 			},
 			error: function() {
@@ -258,6 +258,40 @@
 		$("#qrcode_modal")[0].style.display = "none";
 	}
 
+	function toggleShowPassword(iClassName) {
+		$(iClassName + " .pwd-show").click(function() {
+			console.log("show/hide click");
+			var input = $(iClassName + " .reg-form [name='pwd']");
+			if (input.attr("type") == "password") {
+				this.children[0].textContent = "hide";
+				input.attr("type", "text");
+			} else {
+				this.children[0].textContent = "show";
+				input.attr("type", "password");
+			}
+		});
+	}
+
+	$( document ).ready(function() {
+
+		// fill keep table
+		generateKeepTable();
+
+		// add new entry submit action
+		$("#add_new_entry_modal .reg-form")[0].onsubmit = onAddNewEntryFormSubmit;
+		// edit entry submit action
+		$("#edit_entry_modal .reg-form")[0].onsubmit = onEditEntryModalFormSubmit;
+
+		// toggle show/hide password in add new entry form
+		toggleShowPassword("#add_new_entry_modal");
+
+		// toggle show/hide password in add new entry form
+		toggleShowPassword("#edit_entry_modal");
+
+		// hook close button for qrcode popup close button
+		$("#qrcode_modal .closediv")[0].onclick = qrcodeDialogClose;
+	});
+
 	</script>
 	<body>
 		<h1><span class="lightblue">the</span> <span class="darkgreen">Keep</span></h1>
@@ -265,34 +299,38 @@
 			<a href="#">new</a>
 		</div>
 
-		<!-- modal add_new -->
 		<div id="add_new_entry_modal" class="modal">
-			<div class="modal-content">
-				<span class="close" id="add-new-close-button">&times;</span>
-				<div id="registration-form">
-				<div class='fieldset'>
-					<legend><span class="lightblue">new</span> <span class="darkgreen">Entry</span></legend>
-					<form id="actual-registration-form" onsubmit="return onAddNewEntryFormSubmit()" class="form-container" autocomplete="off">
-						<div class='row'>
-							<label for='input-name'>name</label>
-							<input type="text" class="form-control" required placeholder="name..." name="input-name" id="input-name">
+			<div class="dppopup modal-content">
+				<div class="ppheader">
+					<label class="pptitle">Add new entry</label>
+					<div class="closediv unselectable">X</div>
+				</div>
+				<div class="ppformwrapper">
+					<form action="none" class="reg-form">
+						<div class="reg-form-row">
+							<label for="name">Name</label>
+							<input name="name" type="text" autocomplete="off" required/>
 						</div>
-						<div class='row'>
-							<label for="input-link">link</label>
-							<input type="text" class="form-control" required placeholder="link..." name="input-link" id="input-link">
+						<div class="reg-form-row">
+							<label for="link">Link</label>
+							<input name="link" type="text" autocomplete="off" required/>
 						</div>
-						<div class='row'>
-							<label for="input-tags">tags</label>
-							<input type="text" placeholder="short comma separated tags (e.g mac,hw,news)" name="input-tags" id="input-tags">
+						<div class="reg-form-row">
+							<label for="tags">Tags</label>
+							<input name="tags" type="text" autocomplete="off"/>
 						</div>
-						<div class='row'>
-							<label for="input-pwd">password</label>
-							<input type="password" class="form-control" placeholder="type 'random' for a randomly generated password" name="input-pwd" id="input-pwd" required>
+						<div class="reg-form-row">
+							<label for="pwd">Password</label>
+							<input name="pwd" type="password" autocomplete="off" required/>
+							<div class="pwd-show">
+								<label class="unselectable">show</label>
+							</div>
 						</div>
-						<input type="submit" value="save">
+						<div class="reg-form-submit">
+							<input type="submit" value="save">
+						</div>
 					</form>
 				</div>
-			</div>
 			</div>
 		</div>
 		<!-- end modal add_new -->
@@ -317,46 +355,54 @@
 
 		<!-- modal edit record -->
 		<div id="edit_entry_modal" class="modal">
-			<div class="modal-content">
-				<span class="close" id="edit-entry-close-button">&times;</span>
-				<div id="registration-form">
-				<div class='fieldset'>
-					<legend><span class="lightblue">edit</span> <span class="darkgreen">Entry</span></legend>
-					<form id="edit-entry-modal-form" onsubmit="return onEditEntryModalFormSubmit()" class="form-container" autocomplete="off">
-						<div class='row'>
-							<label for='input-name'>name</label>
-							<input type="text" class="form-control" required placeholder="name..." name="input-name" id="input-name" disabled>
+			<div class="dppopup modal-content">
+				<div class="ppheader">
+					<label class="pptitle">Edit entry</label>
+					<div class="closediv unselectable">X</div>
+				</div>
+				<div class="ppformwrapper">
+					<form action="none" class="reg-form">
+						<div class="reg-form-row">
+							<label for="name">Name</label>
+							<input name="name" type="text" autocomplete="off" disabled/>
 						</div>
-						<div class='row'>
-							<label for="input-link">link</label>
-							<input type="text" class="form-control" required placeholder="link..." name="input-link" id="input-link">
+						<div class="reg-form-row">
+							<label for="link">Link</label>
+							<input name="link" type="text" autocomplete="off" required/>
 						</div>
-						<div class='row'>
-							<label for="input-tags">tags</label>
-							<input type="text" placeholder="short comma separated tags (e.g mac,hw,news)" name="input-tags" id="input-tags">
+						<div class="reg-form-row">
+							<label for="tags">Tags</label>
+							<input name="tags" type="text" autocomplete="off"/>
 						</div>
-						<div class='row'>
-							<label for="input-pwd">password</label>
-							<input type="password" class="form-control" placeholder="leave this empty if you don't want to change it" name="input-pwd" id="input-pwd">
+						<div class="reg-form-row">
+							<label for="pwd">Password</label>
+							<input name="pwd" type="password" autocomplete="off"/>
+							<div class="pwd-show">
+								<label class="unselectable">show</label>
+							</div>
 						</div>
-						<input type="submit" value="save">
+						<div class="reg-form-submit">
+							<input type="submit" value="save">
+						</div>
 					</form>
 				</div>
-			</div>
 			</div>
 		</div>
 		<!-- end modal edit record -->
 
 		<!-- qrcode modal -->
 		<div id="qrcode_modal" class="modal">
-			<div class="qrcode-dialog">
-				<span class="close" id="qrcode-modal-close-button">&times;</span>
-				<div class="modal-title"><span class="lightblue">qr</span> <span class="darkgreen">Code</span></div>
-				<div class="qrcode-div" id="qrcode-div">
-					<img id="qrcode-img" src="" alt=""/>
+			<div class="dppopup modal-content">
+				<div class="ppheader">
+					<label class="pptitle">QR Code</label>
+					<div class="closediv unselectable">X</div>
 				</div>
-				<!-- <div id="qrcode"></div> -->
-			</div>
+				<div class="ppqrcodewrapper">
+					<div class="qrcode-div" id="qrcode-div">
+						<img class="qrcode-img" src="" alt=""/>
+					</div>
+				</div>
+			</div>	
 		</div>
 		<!-- end qrcode modal -->
 

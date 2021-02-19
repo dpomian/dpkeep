@@ -1,0 +1,93 @@
+.mypp {
+  background-color: #46b486;
+  height: 400px;
+  width: 400px;
+  padding:10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ppheader {
+    background-color: salmon;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ppformwrapper {
+    background-color: thistle;
+    width:100%;
+    height:300px;
+}
+
+.closediv {
+    background-color: blueviolet;
+    width: 20px;
+    height: 20px;
+}
+
+.closediv:hover {
+    cursor: pointer;
+}
+
+.reg-form {
+    background-color: brown;
+}
+
+.reg-form-row {
+    position: relative;
+    width: 100%;
+    height: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+}
+
+.reg-form-row label {
+    width: 80px;
+    align-self: flex-end;
+    text-decoration: underline;
+}
+
+.reg-form-row input {
+    width: 320px;
+}
+
+.pwd-show {
+    background-color: cadetblue;
+    position: absolute;
+    width: 40px;
+    top: 6px;
+    right: 3px;
+    text-align: center;
+}
+
+.pwd-show label {
+    text-decoration: none;
+}
+
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.reg-form-submit {
+    height: 50px;
+    background-color: chartreuse;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.reg-form-submit input {
+    height: 30px;
+    width: 50%;
+}
