@@ -2,8 +2,6 @@
 	<head>
 		<title>Keep</title>
 		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
-		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/add_new.css') }}">
-		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/yesnodialog.css') }}">
 		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/qrcodedialog.css') }}">
 		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mypp_orange_white.css') }}">
 		<link href="https://parsleyjs.org/src/parsley.css" rel="stylesheet" />
@@ -90,7 +88,7 @@
 	function confirmDeleteDialogOpen(glyph) {
 		glyphToDelete = glyph;
 		var name = $(glyphToDelete).closest('tr')[0].cells[0].innerText;
-		$("#name-to-confirm-delete")[0].innerText = "'" + name + "'";
+		$("#confirm_delete_modal .ppcontent [name='todelete'")[0].innerText = "'" + name + "'";
 		$("#confirm_delete_modal")[0].style.display = "block";
 	}
 
@@ -290,6 +288,15 @@
 
 		// hook close button for qrcode popup close button
 		$("#qrcode_modal .closediv")[0].onclick = qrcodeDialogClose;
+
+		// hook close button for confirm delete popup
+		$("#confirm_delete_modal .closediv")[0].onclick = confirmDeleteDialogCloseNo;
+
+		// hook no button for confirm delete popup
+		$("#confirm_delete_modal .button-no")[0].onclick = confirmDeleteDialogCloseNo;
+
+		// hook yes button for confirm delte popup
+		$("#confirm_delete_modal .button-yes")[0].onclick = confirmDeleteDialogCloseYes;
 	});
 
 	</script>
@@ -300,7 +307,7 @@
 		</div>
 
 		<div id="add_new_entry_modal" class="modal">
-			<div class="dppopup modal-content">
+			<div class="dppopup dppopup-1x modal-content">
 				<div class="ppheader">
 					<label class="pptitle">Add new entry</label>
 					<div class="closediv unselectable">X</div>
@@ -337,25 +344,25 @@
 
 		<!-- modal confirm delete -->
 		<div id="confirm_delete_modal" class="modal">
-			<div class="yesno-dialog">
-				<div class="modal-title"><span class="lightblue">confirm</span> <span style="color: #FB667A">Delete</span></div>
-				<h3 id="name-to-confirm-delete"></h3>
-				<br/>
-				<div class="button-no" id="button-no" onclick="confirmDeleteDialogCloseNo()">
-					<a href="#" style="color:red">no</a>
-				</div>
-				<div class="button-yes" id="button-yes" onclick="confirmDeleteDialogCloseYes()">
-					<a href="#" style="color:seagreen">yes</a>
-				</div>
-				<br/>
-				<br/>
+		<div class="dppopup-075xh dppopup modal-content">
+			<div class="ppheader">
+				<label class="pptitle">Confirm <span style="color:crimson">delete</span>?</label>
+				<div class="closediv unselectable">X</div>
 			</div>
+			<div class="ppcontent">
+				<label name="todelete"></label>
+				<div class="yes-no">
+					<button class="button-yes">yes</button>
+					<button class="button-no">no</button>
+				</div>
+			</div>
+		</div>
 		</div>
 		<!-- end modal confirm delete -->
 
 		<!-- modal edit record -->
 		<div id="edit_entry_modal" class="modal">
-			<div class="dppopup modal-content">
+			<div class="dppopup dppopup-1x modal-content">
 				<div class="ppheader">
 					<label class="pptitle">Edit entry</label>
 					<div class="closediv unselectable">X</div>
@@ -392,7 +399,7 @@
 
 		<!-- qrcode modal -->
 		<div id="qrcode_modal" class="modal">
-			<div class="dppopup modal-content">
+			<div class="dppopup dppopup-1x modal-content">
 				<div class="ppheader">
 					<label class="pptitle">QR Code</label>
 					<div class="closediv unselectable">X</div>
