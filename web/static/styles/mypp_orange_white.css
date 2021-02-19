@@ -1,3 +1,9 @@
+:root {
+    --orange: #ffa600;
+    --green: #0b8f0b;
+}
+
+
 /* The Modal (background) */
 .modal {
   display: none; /* Hidden by default */
@@ -23,10 +29,18 @@
   width: 35%;
 }
 
+.dppopup-075xh {
+    width: 400px;
+    height: 230px;
+}
+
+.dppopup-1x {
+    width: 400px;
+    height: 310px;
+}
+
 .dppopup {
   background-color: #ffffff;
-  height: 310px;
-  width: 400px;
   padding:10px;
   display: flex;
   flex-direction: column;
@@ -57,14 +71,13 @@
 }
 
 .ppheader .pptitle {
-    color: #ffa600;
+    color: var(--orange);
     font-weight: bold;
     font-size: 24px;
 }
 
 
 .ppformwrapper {
-    background-color: thistle;
     width:100%;
     height:300px;
 }
@@ -89,7 +102,7 @@
 
 .reg-form-row label {
     width: 80px;
-    color: #ffa600;
+    color: var(--orange);
     align-self: flex-end;
     font-size: 16px;
 }
@@ -99,28 +112,30 @@
     border: 0;
     outline: 0;
     background: transparent;
-    border-bottom: 1px solid #ffa600;
+    border-bottom: 1px solid var(--orange);
     padding-top:12px;
     padding-left: 5px;
     font-size:14px;
 }
 
 .pwd-show {
-    background-color: #ffa600;
+    background-color: var(--orange);
     position: absolute;
     width: 40px;
     top: 4px;
     right: 3px;
     text-align: center;
+    cursor: pointer;
 }
 
 .pwd-show:hover {
-    background-color: #0b8f0b;
+    background-color: var(--green);
 }
 
 .pwd-show label {
     text-decoration: none;
     color: white;
+    cursor: pointer;
 }
 
 .unselectable {
@@ -142,15 +157,16 @@
 
 .reg-form-submit input {
     height: 30px;
-    width: 50%;
-    background-color:#ffa600;
+    width: 30%;
+    background-color:var(--orange);
     border: none;
     color:white;
     font-size: 16px;
+    cursor: pointer;
 }
 
 .reg-form-submit input:hover {
-    background: #0b8f0b;
+    background: var(--green);
 }
 
 .ppqrcodewrapper {
@@ -167,4 +183,50 @@
 .ppqrcodewrapper .qrcode-div img {
     width: 100%;
     height: 100%;
+}
+
+.ppcontent {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.ppcontent label {
+    width: 100%;
+    height: 20px;
+    text-align: center;
+    color: black;
+}
+
+.ppcontent .yes-no {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.ppcontent .yes-no button {
+    height: 30px;
+    width: 30%;
+    background-color:var(--orange);
+    border: none;
+    color:white;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.ppcontent .yes-no .button-yes {
+    color: white;
+}
+
+.ppcontent .yes-no .button-no {
+    color:white;
+}
+
+.ppcontent .yes-no .button-yes:hover {
+ background-color: var(--green);
+}
+
+.ppcontent .yes-no .button-no:hover {
+ background-color: var(--green);
 }
