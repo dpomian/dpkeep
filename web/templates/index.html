@@ -161,12 +161,12 @@
 				glyph.onmouseout = function(){};
 
 				setTimeout(function() { 
-					glyph.style.color = 'grey';
+					glyph.style.color = getComputedStyle(glyph).getPropertyValue('--glyph-color');
 					glyph.onmouseover = function() {
-						glyph.style.color = '--glyph-hover-color';
+						glyph.style.color = getComputedStyle(glyph).getPropertyValue('--glyph-hover-color');
 					}
 					glyph.onmouseout = function() {
-						glyph.style.color = 'grey';
+						glyph.style.color = getComputedStyle(glyph).getPropertyValue('--glyph-color');
 					}
 					}, 3000);
 			},

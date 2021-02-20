@@ -123,6 +123,10 @@
     padding-inline: 15px;
 }
 
+.table-data .keep-table .action-cell div {
+    color: var(--glyph-color);
+}
+
 .table-data .keep-table .action-cell div:hover {
     color: var(--glyph-hover-color);
     cursor: pointer;

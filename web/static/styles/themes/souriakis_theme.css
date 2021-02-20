@@ -8,6 +8,7 @@
     --table-row-hover-color: white;
     --table-alternate-odd: rgba(47, 190, 201, 0.00);
     --table-alternate-even: rgba(47, 190, 201, 0.00);
+    --glyph-color:grey;
     --glyph-hover-color: white;
 }
 
