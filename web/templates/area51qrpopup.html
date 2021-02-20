@@ -1,24 +1,47 @@
 <html lang="EN">
 <head>
     <title>try</title>
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mypp_debug.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index_orange_white.css') }}">
 </head>
 <style>
 </style>
 <script>
 </script>
-
 <body>
-    <div class="dppopup">
-        <div class="ppheader">
-            <label class="pptitle">QR Code</label>
-            <div class="closediv unselectable">X</div>
+    <div class="index-content">
+        <div class="title">
+            <label>the Keep</label>
         </div>
-        <div class="ppqrcodewrapper">
-            <div class="qrcode-div">
-                <img id="qrcode-img" src="{{ url_for ('static', filename='styles/qrcode.png') }}" alt=""/>
-            </div>
+        <div class="action-bar">
+            <button class="action-button">New</button>
         </div>
-    </div>	
+        <div class="search-bar">
+            <input type="text" autocomplete="off" placeholder="search here">
+        </div>
+        <div class="table-data">
+            <table id="atable" action="none" class="keep-table">
+                <thead>
+                    <tr>
+                        <th style="width: 10%;">name</th>
+                        <th style="width: 20%;">tags</th>
+                        <th style="width: 65%;">link</th>
+                        <th style="width: 5%;">actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>amazon</td>
+                        <td>amazon,shopping</td>
+                        <td>http://amazon.fr</td>
+                        <td>
+                            <div class="action-cell">
+                                <label>copy</label>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </body>
 </html>
