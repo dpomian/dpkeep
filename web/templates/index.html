@@ -1,13 +1,10 @@
 <html>
 	<head>
 		<title>Keep</title>
-		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
-		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/qrcodedialog.css') }}">
+		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/theme.css') }}">
 		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mypp_orange_white.css') }}">
-		<link href="https://parsleyjs.org/src/parsley.css" rel="stylesheet" />
 		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-		<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/130527/qrcode.js"></script>
 	</head>
 <style>
 </style>
@@ -15,7 +12,7 @@
 
 	function filterBySearch() {
 		var td, i, tdArr, j;
-		var input = $("#searchInput")[0];
+		var input = $(".search-bar [name='search']")[0];
 		var filter = input.value.toUpperCase();
 		var table = $("#keeptable")[0];
 		var tr = table.getElementsByTagName("tr");
@@ -139,19 +136,13 @@
 					var cell = row.insertCell(-1);
 					cell.innerHTML = '<a href="' + table_data[i].link + '" target="_blank" rel="noopener noreferrer">'+ table_data[i].link + '</a>';
 					var cell = row.insertCell(-1);
-					cell.innerHTML = '<div class="button" id="button-5" onclick="return false"><div id="translate"></div><a href="#">edit</a></div>';
-					cell.innerHTML = '<span style="font-size: 2em; color: Grey;">\
-							<i class="fa fa-trash" onclick="confirmDeleteDialogOpen(this)" title="delete"></i>\
-						</span>\
-						<span style="font-size: 2.1em; color: Grey;">\
-							<i class="fa fa-edit" onclick="editEntryDialogOpen(this)" title="edit"></i>\
-						</span>\
-						<span style="font-size: 2em; color: Grey;">\
-							<i class="fa fa-copy" onclick="copy(this)" title="copy"></i>\
-						</span>\
-						<span style="font-size: 2em; color: Grey;">\
-							<i class="fa fa-qrcode" onclick="qrcodeDialogOpen(this)" title="qr code"></i>\
-						</span>';
+					cell.innerHTML = '\
+					 <div class="action-cell"> \
+							<div><i class="fa fa-trash" onclick="confirmDeleteDialogOpen(this)" title="delete"></i></div>\
+							<div><i class="fa fa-edit" onclick="editEntryDialogOpen(this)" title="edit"></i></div>\
+							<div><i class="fa fa-copy" onclick="copy(this)" title="copy"></i></div>\
+							<div><i class="fa fa-qrcode" onclick="qrcodeDialogOpen(this)" title="qr code"></i></div>\
+					</div>';
 				}
 			},
 			error: function() {
@@ -297,15 +288,16 @@
 
 		// hook yes button for confirm delte popup
 		$("#confirm_delete_modal .button-yes")[0].onclick = confirmDeleteDialogCloseYes;
+
+		// hook up search bar with the filter table function
+		$(".search-bar [name='search']")[0].onkeyup = filterBySearch;
+
+		// hook up the new button with add new entry popup
+		$(".action-bar .action-button-new")[0].onclick = addNewDialogOpen;
 	});
 
 	</script>
 	<body>
-		<h1><span class="lightblue">the</span> <span class="darkgreen">Keep</span></h1>
-		<div class="button-action button-action-positive" id="new_entry_button" title="add new entry" onclick="addNewDialogOpen()">
-			<a href="#">new</a>
-		</div>
-
 		<div id="add_new_entry_modal" class="modal">
 			<div class="dppopup dppopup-1x modal-content">
 				<div class="ppheader">
@@ -413,25 +405,28 @@
 		</div>
 		<!-- end qrcode modal -->
 
-		<br/>
-		<br/>
-		<!-- search bar -->
-
-		<input type="text" id="searchInput" onkeyup="filterBySearch()" placeholder="search here..." title="type in a name" autocomplete="off">
-
-		<!-- end search bar -->
-
-		<!-- keep table -->
-		<table id="keeptable" class="container">
-			<thead>
-				<tr>
-					<th style="width:10%"><h1>name</h1></th>
-					<th style="width:15%"><h1>tags</h1></th>
-					<th style="width:64%"><h1>link</h1></th>
-					<th style="width:11%"><h1/>actions</th>
-				</tr>
-			</thead>
-		</table>
-		<!-- end keep table -->
+		<!-- index content -->
+		<div class="title">
+			<label>the Keep</label>
+		</div>
+		<div class="action-bar">
+			<button class="action-button-new">New</button>
+		</div>
+		<div class="search-bar">
+			<input name="search" type="text" autocomplete="off" placeholder="search here">
+		</div>
+		<div class="table-data">
+			<table id="keeptable" action="none" class="keep-table">
+				<thead>
+					<tr>
+						<th style="width: 10%;">name</th>
+						<th style="width: 20%;">tags</th>
+						<th style="width: 60%;">link</th>
+						<th style="width: 10%;">actions</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+		<!-- end index content -->
 	</body>
 </html>
