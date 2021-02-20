@@ -28,6 +28,11 @@
     height: 230px;
 }
 
+.dppopup-125xw {
+    width: 500px;
+    height: 310px;
+}
+
 .dppopup-1x {
     width: 400px;
     height: 310px;
@@ -95,14 +100,14 @@
 }
 
 .reg-form-row label {
-    width: 80px;
+    width: 20%;
     color: var(--main-color);
     align-self: flex-end;
     font-size: 16px;
 }
 
 .reg-form-row input {
-    width: 320px;
+    width: 80%;
     border: 0;
     outline: 0;
     background: transparent;
@@ -112,11 +117,36 @@
     font-size:14px;
 }
 
+.reg-form-row .pan-right {
+    width: 63%;
+}
+
+.pwd-generate {
+    background-color: var(--main-color);
+    position: absolute;
+    width: 70px;
+    height: 20px;
+    right: 3px;
+    top: -10px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.pwd-generate:hover {
+    background-color: var(--hover-color);
+}
+
+.pwd-generate label {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 .pwd-show {
     background-color: var(--main-color);
     position: absolute;
-    width: 40px;
-    top: 4px;
+    width: 70px;
+    top: 12px;
     right: 3px;
     text-align: center;
     cursor: pointer;

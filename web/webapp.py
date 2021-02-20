@@ -114,7 +114,7 @@ def addnew():
 def pass_gen_api():
     pwd = pwd_utils.generate_pwd()
     clipboard.copy(pwd)
-    return jsonify({'data':{'pwd':pwd}})
+    return jsonify({'data':{'pwd':pwd, 'result':'success'}})
 
 
 @app.route('/keep/api/v1/genqr/', methods=['GET'])

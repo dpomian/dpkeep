@@ -2,7 +2,8 @@
 	<head>
 		<title>Keep</title>
 		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/theme.css') }}">
-		<!-- <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}"> -->
+		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
+		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mypp.css') }}">
 		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	</head>
@@ -261,10 +262,33 @@
 		});
 	}
 
+	function setRandomPassword(iElement) {
+		console.log('here');
+		$.ajax({
+			type: 'GET',
+			url: '/keep/api/v1/passgen/',
+			success: function(resp) {
+				if(resp.data.result === 'success') {
+					iElement.value = resp.data.pwd;
+				}
+			},
+			error: function() {
+			}
+		});
+	}
+
 	$( document ).ready(function() {
 
 		// fill keep table
 		generateKeepTable();
+
+		$("#add_new_entry_modal .reg-form .pwd-generate").click(function() {
+			setRandomPassword($("#add_new_entry_modal .reg-form .reg-form-row .pwd-input")[0]);
+		})
+		$("#edit_entry_modal .reg-form .pwd-generate").click(function() {
+			console.log('here2');
+			setRandomPassword($("#edit_entry_modal .reg-form .reg-form-row .pwd-input")[0]);
+		})
 
 		// add new entry submit action
 		$("#add_new_entry_modal .reg-form")[0].onsubmit = onAddNewEntryFormSubmit;
@@ -299,7 +323,7 @@
 	</script>
 	<body>
 		<div id="add_new_entry_modal" class="modal">
-			<div class="dppopup dppopup-1x modal-content">
+			<div class="dppopup dppopup-125xw modal-content">
 				<div class="ppheader">
 					<label class="pptitle">Add new entry</label>
 					<div class="closediv unselectable">X</div>
@@ -320,9 +344,12 @@
 						</div>
 						<div class="reg-form-row">
 							<label for="pwd">Password</label>
-							<input name="pwd" type="password" autocomplete="off" required/>
+							<input class="pan-right pwd-input" name="pwd" type="password" autocomplete="off" placeholder="cannot be empty" required/>
 							<div class="pwd-show">
 								<label class="unselectable">show</label>
+							</div>
+							<div class="pwd-generate" title="generate password">
+								<label class="unselectable">generate</label>
 							</div>
 						</div>
 						<div class="reg-form-submit">
@@ -354,7 +381,7 @@
 
 		<!-- modal edit record -->
 		<div id="edit_entry_modal" class="modal">
-			<div class="dppopup dppopup-1x modal-content">
+			<div class="dppopup dppopup-125xw modal-content">
 				<div class="ppheader">
 					<label class="pptitle">Edit entry</label>
 					<div class="closediv unselectable">X</div>
@@ -375,9 +402,12 @@
 						</div>
 						<div class="reg-form-row">
 							<label for="pwd">Password</label>
-							<input name="pwd" type="password" autocomplete="off"/>
+							<input class="pan-right pwd-input" name="pwd" type="password" autocomplete="off" placeholder="leave empty if you don't want it changed"/>
 							<div class="pwd-show">
 								<label class="unselectable">show</label>
+							</div>
+							<div class="pwd-generate" title="generate password">
+								<label class="unselectable">generate</label>
 							</div>
 						</div>
 						<div class="reg-form-submit">
