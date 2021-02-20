@@ -1,7 +1,11 @@
 :root {
     --main-color: rgb(0, 153, 255);
     --hover-color: #31e440;
+    --hover-text-color: white;
     --table-hover: rgba(0, 153, 255, 0.5);
+    --table-header-color: black;
+    --table-row-color:black;
+    --table-row-hover-color: black;
     --table-alternate-odd: rgba(0, 153, 255, 0.15);
     --table-alternate-even: rgba(0, 153, 255, 0.07);
     --glyph-hover-color: rgb(11, 185, 78);

@@ -2,6 +2,7 @@
 	<head>
 		<title>Keep</title>
 		<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/theme.css') }}">
+		<!-- <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}"> -->
 		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	</head>
@@ -162,7 +163,7 @@
 				setTimeout(function() { 
 					glyph.style.color = 'grey';
 					glyph.onmouseover = function() {
-						glyph.style.color = 'seagreen';
+						glyph.style.color = '--glyph-hover-color';
 					}
 					glyph.onmouseout = function() {
 						glyph.style.color = 'grey';
@@ -419,10 +420,10 @@
 			<table id="keeptable" action="none" class="keep-table">
 				<thead>
 					<tr>
-						<th style="width: 10%;">name</th>
-						<th style="width: 20%;">tags</th>
-						<th style="width: 60%;">link</th>
-						<th style="width: 10%;">actions</th>
+						<th style="width: 10%;">Name</th>
+						<th style="width: 20%;">Tags</th>
+						<th style="width: 60%;">Link</th>
+						<th style="width: 10%;">Actions</th>
 					</tr>
 				</thead>
 			</table>

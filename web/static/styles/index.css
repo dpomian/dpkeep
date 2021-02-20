@@ -29,6 +29,7 @@
 
 .action-bar .action-button-new:hover {
     background: var(--hover-color);
+    color: var(--hover-text-color);
 }
 
 .search-bar {
@@ -76,11 +77,13 @@
 }
 
 .table-data .keep-table th {
-	background-color: var(--main-color);
+    background-color: var(--main-color);
+    color: var(--table-header-color);
 }
 
 .table-data .keep-table tr {
     height: 30px;
+    color: var(--table-row-color);
 }
 
 .table-data .keep-table thead {
@@ -93,9 +96,13 @@
     text-align: left;
 }
 
-.table-data .keep-table a, a:hover, a:active, a:visited { 
-    color: darkcyan;
+.table-data .keep-table a, a:active, a:visited { 
+    color: var(--table-row-color);
     text-decoration: none;
+}
+
+.table-data .keep-table tr:hover a {
+    color: var(--table-row-hover-color);
 }
 
 
@@ -104,6 +111,7 @@
   -webkit-box-shadow: 0 6px 6px -6px var(--table-hover);
   -moz-box-shadow: 0 6px 6px -6px var(--table-hover);
   box-shadow: 0 6px 6px -6px var(--table-hover);
+  color: var(--table-row-hover-color);
 }
 
 .table-data .keep-table .action-cell {
