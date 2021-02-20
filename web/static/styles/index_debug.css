@@ -1,0 +1,32 @@
+.index-content {
+    height: 100%;
+    width: 100%;
+    background-color: aquamarine;
+    display: flex;
+    flex-direction: column;
+}
+
+.index-content .title {
+    background-color: yellow;
+    width: 100%;
+}
+
+.index-content .action-bar{
+    background-color: blue;
+    width: 100%;
+}
+
+.index-content .search-bar {
+    background-color: lightblue;
+    width: 100%;
+}
+
+.index-content .search-bar input {
+    width: 100%;
+}
+
+.index-content .table-data {
+    background-color: lightgreen;
+    width: 100%;
+    height: 400px;
+}
