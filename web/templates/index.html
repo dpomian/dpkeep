@@ -42,9 +42,8 @@
 	}
 
 	function onAddNewEntryFormSubmit(){
-		console.log("onAddNewEntryFormSubmit");
 		var data = {
-			"name": $('#add_new_entry_modal [name="name"]')[0].value,
+			"name": $('#add_new_entry_modal [name="identifier"]')[0].value,
 			"link": $('#add_new_entry_modal [name="link"]')[0].value,
 			"tags": $('#add_new_entry_modal [name="tags"]')[0].value,
 			"pwd": $('#add_new_entry_modal [name="pwd"]')[0].value
@@ -52,7 +51,7 @@
 
 		$.ajax({
 			type: 'POST',
-			url: '/keep/api/v1/new_entry' + name,
+			url: '/keep/api/v1/new_entry',
 			data: JSON.stringify(data),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
@@ -74,7 +73,7 @@
 
 	function addNewDialogOpen() {
 		$("#add_new_entry_modal")[0].style.display = "block";
-		$('#add_new_entry_modal [name="name"]').focus();
+		$('#add_new_entry_modal [name="identifier"]').focus();
 		$("#add_new_entry_modal .closediv")[0].onclick = addNewDialogClose;
 	}
 
@@ -180,7 +179,7 @@
 		var aTableRow = $(glyph).closest('tr')[0];
 
 		var formElements = $("#edit_entry_modal .reg-form")[0].elements;
-		formElements["name"].value = aTableRow.cells[0].innerText;
+		formElements["identifier"].value = aTableRow.cells[0].innerText;
 		formElements["tags"].value = aTableRow.cells[1].innerText;
 		formElements["link"].value = aTableRow.cells[2].innerText;
 
@@ -198,7 +197,7 @@
 	function onEditEntryModalFormSubmit() {
 		var formElements = $("#edit_entry_modal .reg-form")[0].elements;
 		var data = {
-			"name": formElements["name"].value,
+			"name": formElements["identifier"].value,
 			"link": formElements["link"].value,
 			"tags": formElements["tags"].value,
 			"pwd": formElements["pwd"].value
@@ -225,11 +224,11 @@
 	}
 
 	function qrcodeDialogOpen(glyph) {
-		var name = $(glyph).closest('tr')[0].cells[0].innerText;
+		var identifier = $(glyph).closest('tr')[0].cells[0].innerText;
 		console.log(name);
 		$.ajax({
 			type: 'GET',
-			url: '/keep/api/v1/genqr?name=' + name,
+			url: '/keep/api/v1/genqr?name=' + identifier,
 			success: function(resp) {
 				if(resp.data.result === 'success') {
 					$('#qrcode_modal .qrcode-img').attr('src', `data:image/png;base64,${resp.data.bin}`);
@@ -331,16 +330,16 @@
 				<div class="ppformwrapper">
 					<form action="none" class="reg-form">
 						<div class="reg-form-row">
-							<label for="name">Name</label>
-							<input name="name" type="text" autocomplete="off" required/>
+							<label for="identifier">Name</label>
+							<input name="identifier" type="text" autocomplete="off" title="unique identifier" placeholder="unique identifier" required/>
 						</div>
 						<div class="reg-form-row">
 							<label for="link">Link</label>
-							<input name="link" type="text" autocomplete="off" required/>
+							<input name="link" type="text" autocomplete="off" title="url" placeholder="url" required/>
 						</div>
 						<div class="reg-form-row">
 							<label for="tags">Tags</label>
-							<input name="tags" type="text" autocomplete="off"/>
+							<input name="tags" type="text" autocomplete="off" title="comma separated tags" placeholder="comma separated tags"/>
 						</div>
 						<div class="reg-form-row">
 							<label for="pwd">Password</label>
@@ -389,16 +388,16 @@
 				<div class="ppformwrapper">
 					<form action="none" class="reg-form">
 						<div class="reg-form-row">
-							<label for="name">Name</label>
-							<input name="name" type="text" autocomplete="off" disabled/>
+							<label for="identifier">Name</label>
+							<input name="identifier" type="text" placeholder="unique identifier" autocomplete="off" disabled/>
 						</div>
 						<div class="reg-form-row">
 							<label for="link">Link</label>
-							<input name="link" type="text" autocomplete="off" required/>
+							<input name="link" type="text" placeholder="url" autocomplete="off" required/>
 						</div>
 						<div class="reg-form-row">
 							<label for="tags">Tags</label>
-							<input name="tags" type="text" autocomplete="off"/>
+							<input name="tags" type="text" placeholder="comma separated tags" autocomplete="off"/>
 						</div>
 						<div class="reg-form-row">
 							<label for="pwd">Password</label>
