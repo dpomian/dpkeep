@@ -23,6 +23,10 @@ import base64
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
+def _set_environ():
+    os.environ['DPKEEP_NETRC'] = os.path.join(os.path.dirname(__file__),'../res/prd/.netrc')
+    os.environ['DPKEEP_STORAGE'] = os.path.join(os.path.dirname(__file__),'../res/prd/.mykeep_storage')
+
 
 @app.route('/keep/', methods=['GET'])
 def home():
@@ -34,13 +38,12 @@ def home():
 
     return render_template('index.html', data=data_dict)
 
+
 @app.route('/keep/api/v1/cp/', methods=['GET'])
 def copy():
     name = request.args['name'] if 'name' in request.args else None
 
-    os.environ['DPKEEP_NETRC'] = '/Users/dpomian/hardwork/pywork/dpkeep/res/prd/.netrc'
-    os.environ['DPKEEP_STORAGE'] = '/Users/dpomian/hardwork/pywork/dpkeep/res/prd/.mykeep_storage'
-
+    _set_environ()
     mykeep.parse_args(['cp', name])
 
     return jsonify({'data':'copied'})
@@ -51,8 +54,7 @@ def rm():
     name = request.args['name'] if 'name' in request.args else None
     
     if name:
-        os.environ['DPKEEP_NETRC'] = '/Users/dpomian/hardwork/pywork/dpkeep/res/prd/.netrc'
-        os.environ['DPKEEP_STORAGE'] = '/Users/dpomian/hardwork/pywork/dpkeep/res/prd/.mykeep_storage'
+        _set_environ()
         mykeep.parse_args(['rm',name])
         return jsonify({'data':'deleted'})
     return jsonify({'data':'not found'})
@@ -61,8 +63,7 @@ def rm():
 @app.route('/keep/api/v1/new_entry', methods=['POST'])
 def add_new():
     data = request.json
-    os.environ['DPKEEP_NETRC'] = '/Users/dpomian/hardwork/pywork/dpkeep/res/prd/.netrc'
-    os.environ['DPKEEP_STORAGE'] = '/Users/dpomian/hardwork/pywork/dpkeep/res/prd/.mykeep_storage'
+    _set_environ()
 
     if 'name' in data and 'link' in data and 'pwd' in data:
         tags = data['tags'] if 'tags' in data else ''
@@ -78,8 +79,7 @@ def update_entry():
     data = request.json
     print('update data: {}'.format(data))
     
-    os.environ['DPKEEP_NETRC'] = '/Users/dpomian/hardwork/pywork/dpkeep/res/prd/.netrc'
-    os.environ['DPKEEP_STORAGE'] = '/Users/dpomian/hardwork/pywork/dpkeep/res/prd/.mykeep_storage'
+    _set_environ()
     mykeep.parse_args(['up', '-link', data['link'], '-pwd', data['pwd'], '-tags', data['tags'], data['name']])
 
     return jsonify({'data':'updated'})
