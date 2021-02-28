@@ -3,3 +3,4 @@ __pycache__
 .keep_backup
 res/prd/.mykeep_storage
 *.pyc
+runweb.sh
