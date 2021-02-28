@@ -30,6 +30,7 @@ generateRunWebScript() {
 generateNetrcFile() {
 	echo "\n\ngenerating netrc file..."
 
+  mkdir -p $PWD/res/prd
 	netrcfile=$PWD/res/prd/.netrc
 	touch $netrcfile && rm -rf $netrcfile && touch $netrcfile
 	chmod 400 $netrcfile
