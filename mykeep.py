@@ -6,6 +6,7 @@ import unittest
 import json
 import argparse
 import clipboard
+import functools
 from engine import utils
 from engine import storage as st
 from engine import crypto as cry
@@ -15,6 +16,18 @@ from engine import pwd_utils
 # STORAGE = "{}/.dpkeep".format(os.path.expanduser("~"))
 netrcfile = ''
 storagefile = ''
+
+
+def stop_on_exception(func):
+    @functools.wraps(func)
+    def wrapped(*args, **kwargs):
+        try:
+            func(args[0])
+        except ValueError as e:
+            print(e)
+            exit(1)
+    return wrapped
+
 
 def mp(text, var):
     print('{}: {}'.format(text, var))
@@ -41,13 +54,10 @@ def _get_decrypted_dict(crypto, storage):
     return result
 
 
+@stop_on_exception
 def add_entry(args):
     crypto = None
-    try:
-        crypto = cry.Crypto(utils.get_password(netrcfile))
-    except ValueError as e:
-        print(e)
-        exit(1)
+    crypto = cry.Crypto(utils.get_password(netrcfile))
     storage = st.Storage(storagefile)
     data_dict = _get_decrypted_dict(crypto, storage)
     pwd = pwd_utils.generate_pwd() if args.pwd=='random' else args.pwd
@@ -61,6 +71,7 @@ def add_entry(args):
     storage.write(recrypted)
 
 
+@stop_on_exception
 def list_all(args):
     crypto = cry.Crypto(utils.get_password(netrcfile))
     storage = st.Storage(storagefile)
@@ -69,6 +80,7 @@ def list_all(args):
         print(_format_entry(data_dict, key))
 
 
+@stop_on_exception
 def cp_pwd(args):
     if not args.name:
         return
@@ -79,6 +91,7 @@ def cp_pwd(args):
     clipboard.copy(data_dict[args.name]['pwd']) if args.name in data_dict else clipboard.copy('')
 
 
+@stop_on_exception
 def remove_entry(args):
     if not args.name:
         return
@@ -136,6 +149,7 @@ def chng_pwd(args):
     _replace_in_file('./res/prd/.mig_netrc', tmp)
 
 
+@stop_on_exception
 def update_entry(args):
     crypto = cry.Crypto(utils.get_password(netrcfile))
     storage = st.Storage(storagefile)
