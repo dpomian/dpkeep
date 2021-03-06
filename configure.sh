@@ -86,7 +86,7 @@ generateRunnerScript() {
 	runnerscript=$PWD/keep.sh
 	echo "#!/bin/sh" > $runnerscript
 	echo "source $PWD/venv/bin/activate" >> $runnerscript
-	echo "python $PWD/mykeep.py \"\$@\"" >> $runnerscript
+	echo "python $PWD/cli/mykeep.py \"\$@\"" >> $runnerscript
 	echo "deactivate" >> $runnerscript
 	chmod +x $runnerscript
 

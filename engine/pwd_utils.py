@@ -2,9 +2,7 @@ import random
 import string
 
 def generate_pwd():
-    #chars = list(f'{string.ascii_letters}{string.digits}')
-    result = ''
-    chars = list('{}{}'.format(string.ascii_letters,string.digits))
+    chars = list('{}{}'.format(string.ascii_letters, string.digits))
     random.shuffle(chars)
     grps = []
 

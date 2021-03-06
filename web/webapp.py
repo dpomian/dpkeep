@@ -1,7 +1,7 @@
 import sys
-sys.path.append('..')
-
 import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import io
 import flask
 import clipboard
@@ -11,8 +11,8 @@ from flask import make_response
 from flask import send_file
 from engine import crypto as cry
 from engine import storage as st
-from mykeep import _get_decrypted_dict
-import mykeep
+from cli.mykeep import _get_decrypted_dict
+from cli import mykeep
 from engine import utils
 from engine import pwd_utils
 import qrcode

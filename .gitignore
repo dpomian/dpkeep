@@ -4,3 +4,4 @@ __pycache__
 res/prd/.mykeep_storage
 *.pyc
 runweb.sh
+*.swp
