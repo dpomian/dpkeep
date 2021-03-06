@@ -9,8 +9,8 @@ from engine import utils
 from engine import crypto as cry
 
 class TestEngine(unittest.TestCase):
-    def setUp(self):
-        self.netrcfile = os.path.join(os.path.dirname(__file__),'./res/.netrc')
+    def setUpClass():
+        TestEngine.netrcfile = os.path.join(os.path.dirname(__file__),'./res/.netrc')
 
     def test_read_pwd(self):
         expected = b"test password"
