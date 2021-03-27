@@ -18,8 +18,7 @@ class TestEngine(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_encrypt(self):
-        pwd = utils.get_password(self.netrcfile)
-        crypto = cry.Crypto(pwd)
+        crypto = cry.Crypto(utils.build_config('test password', cry.Crypto.generate_salt()))
         encrypted = crypto.encrypt("abcdef")
         decrypted = crypto.decrypt(encrypted)
         self.assertEqual(b"abcdef", decrypted)

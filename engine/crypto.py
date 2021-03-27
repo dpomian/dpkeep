@@ -3,29 +3,28 @@ from cryptography.fernet import Fernet
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+import os
 
 
 class Crypto:
-    def __init__(self, pwd):
-        if type(pwd) == str:
-            pwd = pwd.encode()
+    def generate_salt(salt_len = 32):
+        return os.urandom(salt_len)
 
-        self._pwd = pwd
-
-    def _get_salt(self):
-        return b"F\x12D\x9a\xe9})\xa0\n\x07\x90'\xff|\xd6\x8c\xf4\xae\xa0C\xd8\x8bq!\x08\xa8\x0c\xf5\xbf\xf5F\xa5"
+    def __init__(self, config):
+        if 'mpwd' not in config or 'salt' not in config:
+            raise ValueError('Invalid config')
+        self._config = config
 
     def _get_key(self):
         kdf = PBKDF2HMAC(
             algorithm=hashes.SHA256(),
             length=32,
-            salt=self._get_salt(),
+            salt=bytes.fromhex(self._config['salt']),
             iterations=100000,
             backend=default_backend()
         )
-        key = base64.urlsafe_b64encode(kdf.derive(self._pwd))
+        key = base64.urlsafe_b64encode(kdf.derive(bytes.fromhex(self._config['mpwd'])))
         return key
-
 
     def encrypt(self, data):
         if type(data) == str:

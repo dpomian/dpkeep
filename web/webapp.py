@@ -24,15 +24,16 @@ app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
 def _set_environ():
-    os.environ['DPKEEP_NETRC'] = os.path.join(os.path.dirname(__file__),'../res/prd/.netrc')
     os.environ['DPKEEP_STORAGE'] = os.path.join(os.path.dirname(__file__),'../res/prd/.mykeep_storage')
+    os.environ['DPKEEP_CONFIG'] = os.path.join(os.path.dirname(__file__),'../res/prd/.config')
 
 
 @app.route('/keep/', methods=['GET'])
 def home():
-    netrcfile = os.path.join(os.path.dirname(__file__),'../res/prd/.netrc')
     storagefile = os.path.join(os.path.dirname(__file__),'../res/prd/.mykeep_storage')
-    crypto = cry.Crypto(utils.get_password(netrcfile))
+    configfile = os.path.join(os.path.dirname(__file__),'../res/prd/.config')
+
+    crypto = cry.Crypto(utils.read_config(configfile))
     storage = st.Storage(storagefile)
     data_dict = _get_decrypted_dict(crypto, storage)
 
@@ -87,9 +88,10 @@ def update_entry():
 
 @app.route('/keep/api/v1/ll', methods=['GET'])
 def ll():
-    netrcfile = os.path.join(os.path.dirname(__file__),'../res/prd/.netrc')
     storagefile = os.path.join(os.path.dirname(__file__),'../res/prd/.mykeep_storage')
-    crypto = cry.Crypto(utils.get_password(netrcfile))
+    configfile = os.path.join(os.path.dirname(__file__),'../res/prd/.config')
+
+    crypto = cry.Crypto(utils.read_config(configfile))
     storage = st.Storage(storagefile)
     data_dict = _get_decrypted_dict(crypto, storage)
 
@@ -121,9 +123,10 @@ def pass_gen_api():
 def generate_qr_img():
     name = request.args['name'] if 'name' in request.args else None
 
-    netrcfile = os.path.join(os.path.dirname(__file__),'../res/prd/.netrc')
     storagefile = os.path.join(os.path.dirname(__file__),'../res/prd/.mykeep_storage')
-    crypto = cry.Crypto(utils.get_password(netrcfile))
+    configfile = os.path.join(os.path.dirname(__file__),'../res/prd/.config')
+
+    crypto = cry.Crypto(utils.read_config(configfile))
     storage = st.Storage(storagefile)
     data_dict = _get_decrypted_dict(crypto, storage)
 

@@ -18,6 +18,7 @@ from engine import pwd_utils
 
 netrcfile = ''
 storagefile = ''
+configfile = ''
 
 def stop_on_exception(func):
     @functools.wraps(func)
@@ -58,7 +59,7 @@ def _get_decrypted_dict(crypto, storage):
 @stop_on_exception
 def add_entry(args):
     crypto = None
-    crypto = cry.Crypto(utils.get_password(netrcfile))
+    crypto = cry.Crypto(utils.read_config(configfile))
     storage = st.Storage(storagefile)
     data_dict = _get_decrypted_dict(crypto, storage)
     pwd = pwd_utils.generate_pwd() if args.pwd=='random' else args.pwd
@@ -74,7 +75,7 @@ def add_entry(args):
 
 @stop_on_exception
 def list_all(args):
-    crypto = cry.Crypto(utils.get_password(netrcfile))
+    crypto = cry.Crypto(utils.read_config(configfile))
     storage = st.Storage(storagefile)
     data_dict = _get_decrypted_dict(crypto, storage)
     for key in sorted(data_dict.keys()):
@@ -85,7 +86,7 @@ def list_all(args):
 def cp_pwd(args):
     if not args.name:
         return
-    crypto = cry.Crypto(utils.get_password(netrcfile))
+    crypto = cry.Crypto(utils.read_config(configfile))
     storage = st.Storage(storagefile)
     data_dict = _get_decrypted_dict(crypto, storage)
 
@@ -96,7 +97,7 @@ def cp_pwd(args):
 def remove_entry(args):
     if not args.name:
         return
-    crypto = cry.Crypto(utils.get_password(netrcfile))
+    crypto = cry.Crypto(utils.read_config(configfile))
     storage = st.Storage(storagefile)
     data_dict = _get_decrypted_dict(crypto, storage)
     model.Model().remove_entry(data_dict, args.name)
@@ -152,7 +153,7 @@ def chng_pwd(args):
 
 @stop_on_exception
 def update_entry(args):
-    crypto = cry.Crypto(utils.get_password(netrcfile))
+    crypto = cry.Crypto(utils.read_config(configfile))
     storage = st.Storage(storagefile)
     data_dict = _get_decrypted_dict(crypto, storage)
     data_dict = model.Model().update_entry(data_dict, name=args.name, link=args.link, pwd=args.pwd, tags=args.tags)
@@ -164,9 +165,9 @@ def generate_random_password(args):
 
 
 def parse_args(myargs):
-    global netrcfile, storagefile
-    netrcfile = os.environ['DPKEEP_NETRC'] if 'DPKEEP_NETRC' in os.environ else ''
+    global storagefile, configfile
     storagefile = os.environ['DPKEEP_STORAGE'] if 'DPKEEP_STORAGE' in os.environ else ''
+    configfile = os.environ['DPKEEP_CONFIG'] if 'DPKEEP_CONFIG' in os.environ else ''
     
     parser = argparse.ArgumentParser(description="Password keepr", prog="mykeep", allow_abbrev=True)
 
@@ -210,8 +211,8 @@ def parse_args(myargs):
 
 
 def main():
-    os.environ['DPKEEP_NETRC'] = os.path.join(os.path.dirname(__file__),'../res/prd/.netrc')
     os.environ['DPKEEP_STORAGE'] = os.path.join(os.path.dirname(__file__),'../res/prd/.mykeep_storage')
+    os.environ['DPKEEP_CONFIG'] = os.path.join(os.path.dirname(__file__),'../res/prd/.config')
 
     parse_args(sys.argv[1:])
 
