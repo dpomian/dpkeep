@@ -5,3 +5,7 @@ res/prd/.mykeep_storage
 *.pyc
 runweb.sh
 *.swp
+backup.sh
+keep.sh
+res/prd/.config
+web/static/styles/qrcode.png
