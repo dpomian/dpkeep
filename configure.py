@@ -13,7 +13,7 @@ def _run_generic_setup():
 
 
 def _generate_config_file():
-    mpwd = hashlib.sha512(getpass.getpass(prompt='Pick a master password: ').encode('utf-8')).hexdigest()
+    mpwd = getpass.getpass(prompt='Pick a master password: ')
     config = utils.build_config(mpwd, crypto.Crypto.generate_salt())
     configfile = './res/prd/.config'
     with open(configfile, 'w') as ofile:
