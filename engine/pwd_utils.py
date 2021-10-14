@@ -1,5 +1,6 @@
 import random
 import string
+import os
 
 def generate_pwd():
     chars = list('{}{}'.format(string.ascii_letters, string.digits))
@@ -12,3 +13,6 @@ def generate_pwd():
         
     return '-'.join(grps)
 
+
+def generate_salt(salt_len = 32):
+    return os.urandom(salt_len)

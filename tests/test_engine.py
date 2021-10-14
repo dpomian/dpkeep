@@ -7,6 +7,7 @@ import unittest
 from engine import model
 from engine import utils
 from engine import crypto as cry
+from engine import pwd_utils
 
 class TestEngine(unittest.TestCase):
     def setUpClass():
@@ -18,7 +19,7 @@ class TestEngine(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_encrypt(self):
-        crypto = cry.Crypto(utils.build_config('test password', cry.Crypto.generate_salt()))
+        crypto = cry.Crypto(utils.build_config('test password', pwd_utils.generate_salt()))
         encrypted = crypto.encrypt("abcdef")
         decrypted = crypto.decrypt(encrypted)
         self.assertEqual(b"abcdef", decrypted)

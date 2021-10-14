@@ -7,9 +7,6 @@ import os
 
 
 class Crypto:
-    def generate_salt(salt_len = 32):
-        return os.urandom(salt_len)
-
     def __init__(self, config):
         if 'mpwd' not in config or 'salt' not in config:
             raise ValueError('Invalid config')

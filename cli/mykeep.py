@@ -2,6 +2,7 @@
 
 import os
 import sys
+import getpass
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -34,6 +35,7 @@ def stop_on_exception(func):
 def mp(text, var):
     print('{}: {}'.format(text, var))
 
+
 def _format_entry(data_dict, key):
     tags = ''
     if "tags" in data_dict[key]:
@@ -54,6 +56,10 @@ def _get_decrypted_dict(crypto, storage):
         result = json.loads(decrypted)
 
     return result
+
+
+def _update_config(config):
+    pass
 
 
 @stop_on_exception
@@ -113,42 +119,35 @@ def _replace_in_file(filename, lines):
     os.chmod(filename, 0o400)
 
 
-def chng_pwd(args):
-    if not args.netrc or not os.path.exists(args.netrc):
-        return
+def validate_password(pwd):
+    config = utils.read_config(configfile)
+    if config['mpwd'] != pwd:
+        raise ValueError('Invalid password')
 
-    with open(args.netrc, 'r') as ifile:
-        data = []
-        for line in ifile:
-            if '\n' in line:
-                line = line.replace('\n','')
-            data.append(line)
 
-    if len(data) != 2:
-        return
-    if data[0].find('current:') != 0:
-        return
-    if data[1].find('new:') != 0:
-        return
-    c_pwd = data[0][len('current:'):]
-    n_pwd = data[1][len('new:'):]
+def change_password_interactive(args):
+    old_pwd = getpass.getpass('Old password: ')
+    new_pwd = getpass.getpass('New password: ')
+    validate_password(old_pwd)
+    chng_pwd(old_pwd, new_pwd)
 
-    decryptor = cry.Crypto(c_pwd)
+
+def chng_pwd(old_pwd, new_pwd):
+    old_config = utils.read_config(configfile)
+    crypto = cry.Crypto(old_config)
     storage = st.Storage(storagefile)
+    data_dict = _get_decrypted_dict(crypto, storage)
+
+    new_salt = pwd_utils.generate_salt()
+    new_config = utils.build_config(new_pwd, new_salt)
+    new_crypto = cry.Crypto(new_config)
+
     try:
-        decrypted = decryptor.decrypt(storage.read())
-    except cryptography.fernet.InvalidToken as e:
-        print("your password ain't good")
-        exit(1)
+        storage.write(new_crypto.encrypt(json.dumps(data_dict)))
+    except OSError:
+        return
 
-    encryptor = cry.Crypto(n_pwd)
-    storage.write(encryptor.encrypt(decrypted))
-
-    tmp = [n_pwd.encode()]
-    _replace_in_file(netrcfile, tmp)
-
-    tmp = ['current:{}\n'.format(n_pwd).encode(), 'new:{}'.format(n_pwd).encode()]
-    _replace_in_file('../res/prd/.mig_netrc', tmp)
+    _update_config(new_config)
 
 
 @stop_on_exception
@@ -164,11 +163,7 @@ def generate_random_password(args):
     print('pwd: {}'.format(pwd_utils.generate_pwd()))
 
 
-def parse_args(myargs):
-    global storagefile, configfile
-    storagefile = os.environ['DPKEEP_STORAGE'] if 'DPKEEP_STORAGE' in os.environ else ''
-    configfile = os.environ['DPKEEP_CONFIG'] if 'DPKEEP_CONFIG' in os.environ else ''
-    
+def get_argparser():
     parser = argparse.ArgumentParser(description="Password keepr", prog="mykeep", allow_abbrev=True)
 
     subparsers = parser.add_subparsers(help='commands')
@@ -199,11 +194,20 @@ def parse_args(myargs):
     up_parser.set_defaults(func=update_entry)
 
     chng_parser = subparsers.add_parser('chng', help="change password")
-    chng_parser.add_argument("netrc", help="netrc file for change password")
-    chng_parser.set_defaults(func=chng_pwd)
+    chng_parser.set_defaults(func=change_password_interactive)
 
     gen_parser = subparsers.add_parser('genpwd', help="generates a random password")
     gen_parser.set_defaults(func=generate_random_password)
+
+    return parser
+
+
+def parse_args(myargs):
+    global storagefile, configfile
+    storagefile = os.environ['DPKEEP_STORAGE'] if 'DPKEEP_STORAGE' in os.environ else ''
+    configfile = os.environ['DPKEEP_CONFIG'] if 'DPKEEP_CONFIG' in os.environ else ''
+
+    parser = get_argparser()
 
     args = parser.parse_args(myargs)
     if hasattr(args, 'func'):
