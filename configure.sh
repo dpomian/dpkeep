@@ -30,8 +30,10 @@ generateRunWebScript() {
 generateStorageFile() {
 	echo "\n\ngenerating storage file..."
 
-	storagefile=$PWD/res/prd/.mykeep_storage
-	rm -rf $storagefile && touch $storagefile
+  storagepath=$PWD/res/prd/
+	storagefile=.mykeep_storage
+  mkdir -p $storagepath
+	rm -rf $storagepath/$storagefile && touch $storagepath/$storagefile
 
 	echo "done."
 }
@@ -39,9 +41,10 @@ generateStorageFile() {
 generateBackupStorage() {
 	echo "\n\ngenerating backup storage file..."
 
-	backupstoragefile=$PWD/res/prd/.keep_backup
-	rm -rf $backupstoragefile && touch $backupstoragefile
-	chmod 400 $backupstoragefile
+  backupstoragepath=$PWD/res/prd
+	backupstoragefile=.keep_backup
+	rm -rf $backupstoragepath/$backupstoragefile && touch $backupstoragepath/$backupstoragefile
+	chmod 400 $backupstoragepath/$backupstoragefile
 
 	echo "done."
 }
