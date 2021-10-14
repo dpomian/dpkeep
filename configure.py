@@ -10,7 +10,7 @@ from engine import pwd_utils
 
 
 def _run_generic_setup():
-    print(subprocess.run('source ./configure.sh'))
+    print(subprocess.run(['sh','./configure.sh']))
 
 
 def _generate_config_file():
