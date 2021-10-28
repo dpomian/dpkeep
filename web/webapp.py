@@ -79,7 +79,6 @@ def add_new():
 @app.route('/keep/api/v1/update_entry', methods=['PUT'])
 def update_entry():
     data = request.json
-    print('update data: {}'.format(data))
     
     _set_environ()
     mykeep.parse_args(['up', '-link', data['link'], '-pwd', data['pwd'], '-tags', data['tags'], data['name'], '-uname', data['uname']])
