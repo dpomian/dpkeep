@@ -67,9 +67,10 @@ def add_new():
     _set_environ()
 
     if 'name' in data and 'link' in data and 'pwd' in data:
+        username = data['username'] if 'username' in data else ''
         tags = data['tags'] if 'tags' in data else ''
         tags = ','.join(x.strip() for x in tags.split(',') if x.strip().isalnum())
-        mykeep.parse_args(['add','-name',data['name'],'-link',data['link'],'-pwd',data['pwd'],'-tags',tags])
+        mykeep.parse_args(['add','-name',data['name'],'-link',data['link'],'-pwd',data['pwd'],'-tags',tags,'-uname',username])
         return jsonify({'data':'created'})
 
     return jsonify({'data':'data is not good'})
@@ -81,7 +82,7 @@ def update_entry():
     print('update data: {}'.format(data))
     
     _set_environ()
-    mykeep.parse_args(['up', '-link', data['link'], '-pwd', data['pwd'], '-tags', data['tags'], data['name']])
+    mykeep.parse_args(['up', '-link', data['link'], '-pwd', data['pwd'], '-tags', data['tags'], data['name'], '-uname', data['uname']])
 
     return jsonify({'data':'updated'})
 
@@ -97,7 +98,8 @@ def ll():
 
     result = [] 
     for key in sorted(data_dict.keys()):
-        result.append({'name': key, 'link': data_dict[key]['link'], 'tags':data_dict[key]['tags'] if 'tags' in data_dict[key] else ''})
+        tags = data_dict[key]['tags'] if 'tags' in data_dict[key] else ''
+        result.append({'name': key, 'link': data_dict[key]['link'], 'tags':tags})
 
     return jsonify({'data':result})
 
@@ -144,6 +146,28 @@ def generate_qr_img():
             return jsonify({'data':{'result':'success', 'bin': io.BytesIO(encoded).getvalue().decode()}})
 
     return jsonify({'data':{'result':'fail'}})
+
+
+@app.route('/keep/api/v1/l1', methods=['GET'])
+def list_one():
+    name = request.args['name'] if 'name' in request.args else None
+    if not name:
+        return jsonify({'data':{'result':'fail'}})
+    
+    storagefile = os.path.join(os.path.dirname(__file__),'../res/prd/.mykeep_storage')
+    configfile = os.path.join(os.path.dirname(__file__),'../res/prd/.config')
+
+    crypto = cry.Crypto(utils.read_config(configfile))
+    storage = st.Storage(storagefile)
+    data_dict = _get_decrypted_dict(crypto, storage)
+
+    if name not in data_dict:
+        return jsonify({'data':{'result':'fail'}})
+
+    uname = data_dict[name]['uname'] if 'uname' in data_dict[name] else ''
+    tags = data_dict[name]['tags'] if 'tags' in data_dict[name] else ''
+
+    return jsonify({'data':{'result':'success', 'name': name, 'link': data_dict[name]['link'], 'tags':tags, 'uname':uname}})
 
 
 @app.route('/keep/area51/popup', methods=['GET'])

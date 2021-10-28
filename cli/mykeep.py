@@ -158,7 +158,7 @@ def update_entry(args):
     crypto = cry.Crypto(utils.read_config(configfile))
     storage = st.Storage(storagefile)
     data_dict = _get_decrypted_dict(crypto, storage)
-    data_dict = model.Model().update_entry(data_dict, name=args.name, link=args.link, pwd=args.pwd, tags=args.tags)
+    data_dict = model.Model().update_entry(data_dict, name=args.name, link=args.link, pwd=args.pwd, tags=args.tags, uname=args.uname)
     storage.write(crypto.encrypt(json.dumps(data_dict)))
 
 
@@ -195,6 +195,7 @@ def get_argparser():
     up_parser.add_argument('-link', help='update link')
     up_parser.add_argument('-pwd', help='update pwd')
     up_parser.add_argument('-tags', help='update tags')
+    up_parser.add_argument('-uname', help='username')
     up_parser.set_defaults(func=update_entry)
 
     chng_parser = subparsers.add_parser('chng', help="change password")

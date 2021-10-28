@@ -44,6 +44,7 @@
 	function onAddNewEntryFormSubmit(){
 		var data = {
 			"name": $('#add_new_entry_modal [name="identifier"]')[0].value,
+      "username": $('#add_new_entry_modal [name="username"]')[0].value,
 			"link": $('#add_new_entry_modal [name="link"]')[0].value,
 			"tags": $('#add_new_entry_modal [name="tags"]')[0].value,
 			"pwd": $('#add_new_entry_modal [name="pwd"]')[0].value
@@ -176,17 +177,28 @@
 	}
 
 	function editEntryDialogOpen(glyph) {
-		var aTableRow = $(glyph).closest('tr')[0];
+		var identifier = $(glyph).closest('tr')[0].cells[0].innerText;
+		$.ajax({
+			type: 'GET',
+			url: '/keep/api/v1/l1?name=' + identifier,
+			success: function(resp) {
+				if(resp.data.result === 'success') {
+          var formElements = $("#edit_entry_modal .reg-form")[0].elements;
+          formElements["identifier"].value = resp.data.name;
+          formElements["username"].value = resp.data.uname;
+          formElements["tags"].value = resp.data.tags;
+          formElements["link"].value = resp.data.link;
 
-		var formElements = $("#edit_entry_modal .reg-form")[0].elements;
-		formElements["identifier"].value = aTableRow.cells[0].innerText;
-		formElements["tags"].value = aTableRow.cells[1].innerText;
-		formElements["link"].value = aTableRow.cells[2].innerText;
 
+				}
+			},
+			error: function() {
+			}
+		});
 
-		$("#edit_entry_modal")[0].style.display = "block";
-		$("#edit_entry_modal .reg-form [name='name']").focus();
-		$("#edit_entry_modal .closediv")[0].onclick = editEntryDialogClose;
+    $("#edit_entry_modal")[0].style.display = "block";
+    $("#edit_entry_modal .reg-form [name='name']").focus();
+    $("#edit_entry_modal .closediv")[0].onclick = editEntryDialogClose;
 	}
 
 	function editEntryDialogClose() {
@@ -198,6 +210,7 @@
 		var formElements = $("#edit_entry_modal .reg-form")[0].elements;
 		var data = {
 			"name": formElements["identifier"].value,
+			"uname": formElements["username"].value,
 			"link": formElements["link"].value,
 			"tags": formElements["tags"].value,
 			"pwd": formElements["pwd"].value
@@ -334,6 +347,10 @@
 							<input name="identifier" type="text" autocomplete="off" title="unique identifier" placeholder="unique identifier" required/>
 						</div>
 						<div class="reg-form-row">
+							<label for="username">Username</label>
+							<input name="username" type="text" autocomplete="off" title="username" placeholder="username" required/>
+						</div>
+						<div class="reg-form-row">
 							<label for="link">Link</label>
 							<input name="link" type="text" autocomplete="off" title="url" placeholder="url" required/>
 						</div>
@@ -390,6 +407,10 @@
 						<div class="reg-form-row">
 							<label for="identifier">Name</label>
 							<input name="identifier" type="text" placeholder="unique identifier" autocomplete="off" disabled/>
+						</div>
+						<div class="reg-form-row">
+							<label for="username">Username</label>
+							<input name="username" type="text" placeholder="username" autocomplete="off"/>
 						</div>
 						<div class="reg-form-row">
 							<label for="link">Link</label>
