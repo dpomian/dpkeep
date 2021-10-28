@@ -188,17 +188,15 @@
           formElements["username"].value = resp.data.uname;
           formElements["tags"].value = resp.data.tags;
           formElements["link"].value = resp.data.link;
-
-
 				}
+        $("#edit_entry_modal")[0].style.display = "block";
+        $("#edit_entry_modal .reg-form [name='name']").focus();
+        $("#edit_entry_modal .closediv")[0].onclick = editEntryDialogClose;
 			},
 			error: function() {
 			}
 		});
 
-    $("#edit_entry_modal")[0].style.display = "block";
-    $("#edit_entry_modal .reg-form [name='name']").focus();
-    $("#edit_entry_modal .closediv")[0].onclick = editEntryDialogClose;
 	}
 
 	function editEntryDialogClose() {
