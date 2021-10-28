@@ -7,7 +7,11 @@ from unittest.mock import patch
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import cli
+from cli import mykeep
 import engine
+from engine import crypto
+from engine import utils
+from engine import pwd_utils
 
 class TestCli(unittest.TestCase):
     @patch("getpass.getpass", side_effect=['abc','def'])
@@ -65,3 +69,23 @@ class TestCli(unittest.TestCase):
             cli.mykeep.validate_password(old_pwd)
         except ValueError:
             self.fail("validate_password() raised an unexpected exception!")
+
+
+    def test_add_new_entry_accepts_username(self):
+        parser = mykeep.get_argparser()
+        args = ['add', '-name', 'abc', '-link', 'https://domain.com', '-pwd', 'abc', '-uname', 'abc@mail.com']
+        args = parser.parse_args(args)
+        self.assertEqual(args.uname, "abc@mail.com")
+
+
+    def test_add_new_entry_with_username(self):
+        parser = mykeep.get_argparser()
+        args = ['add', '-name', 'abc', '-link', 'https://domain.com', '-pwd', 'abc', '-uname', 'abc@mail.com']
+        args = parser.parse_args(args)
+
+        data_dict = {}
+        expected_data_dict = {
+            'abc': {'link': 'https://domain.com', 'pwd': 'abc', 'uname':'abc@mail.com'}
+        }
+        mykeep.add_entry(args, data_dict)
+        self.assertEqual(expected_data_dict, data_dict)

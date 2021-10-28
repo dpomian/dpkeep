@@ -10,6 +10,7 @@ class Model:
         link = kwargs['link'] if 'link' in kwargs else None
         pwd = kwargs['pwd'] if 'pwd' in kwargs else None
         tags = kwargs['tags'] if 'tags' in kwargs else None
+        uname = kwargs['uname'] if 'uname' in kwargs else None
 
         if link is None or pwd is None or name is None:
             raise ValueError('attributes cannot be empty')
@@ -24,6 +25,8 @@ class Model:
         data_dict[name]["pwd"] = pwd
         if tags:
             data_dict[name]["tags"] = tags
+        if uname:
+            data_dict[name]["uname"] = uname
 
         return data_dict
 
@@ -43,6 +46,8 @@ class Model:
                 data_dict[name]['pwd'] = kwargs['pwd']
             if 'tags' in kwargs and kwargs['tags']:
                 data_dict[name]['tags'] = kwargs['tags']
+            if 'uname' in kwargs and kwargs['uname']:
+                data_dict[name]['uname'] = kwargs['uname']
         return data_dict
 
     def _is_name_valid(self, name):

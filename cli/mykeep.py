@@ -62,19 +62,21 @@ def _update_config(config):
     pass
 
 
-@stop_on_exception
-def add_entry(args):
-    crypto = None
-    crypto = cry.Crypto(utils.read_config(configfile))
-    storage = st.Storage(storagefile)
-    data_dict = _get_decrypted_dict(crypto, storage)
+def add_entry(args, data_dict):
     pwd = pwd_utils.generate_pwd() if args.pwd=='random' else args.pwd
     try:
-        model.Model().add_entry(data_dict, name=args.name, link=args.link, pwd=pwd, tags=args.tags)
+        data_dict = model.Model().add_entry(data_dict, name=args.name, link=args.link, pwd=pwd, tags=args.tags, uname=args.uname)
     except ValueError as e:
         print(e)
         exit(1)
+    return data_dict
 
+
+@stop_on_exception
+def add_entry_cli(args):
+    crypto = cry.Crypto(utils.read_config(configfile))
+    storage = st.Storage(storagefile)
+    data_dict = add_entry(args, _get_decrypted_dict(crypto, storage))
     recrypted = crypto.encrypt(json.dumps(data_dict))
     storage.write(recrypted)
 
@@ -84,6 +86,7 @@ def list_all(args):
     crypto = cry.Crypto(utils.read_config(configfile))
     storage = st.Storage(storagefile)
     data_dict = _get_decrypted_dict(crypto, storage)
+    print(data_dict)
     for key in sorted(data_dict.keys()):
         print(_format_entry(data_dict, key))
 
@@ -173,7 +176,8 @@ def get_argparser():
     add_parser.add_argument("-link", help="actual link. Must be surrounded by quotes", required=True)
     add_parser.add_argument("-pwd", help="password. Must be surrounded by quotes", required=True)
     add_parser.add_argument("-tags", help="add comma separated tags")
-    add_parser.set_defaults(func=add_entry)
+    add_parser.add_argument("-uname", help="username")
+    add_parser.set_defaults(func=add_entry_cli)
 
     list_parser = subparsers.add_parser('ll', help='list all')
     list_parser.set_defaults(func=list_all)
