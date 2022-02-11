@@ -12,6 +12,7 @@ import engine
 from engine import crypto
 from engine import utils
 from engine import pwd_utils
+from engine.config import Config
 
 class TestCli(unittest.TestCase):
     @patch("getpass.getpass", side_effect=['abc','def'])
@@ -29,7 +30,7 @@ class TestCli(unittest.TestCase):
             self.fail(f'Unexpected exception raised!: {v}')
 
 
-    @patch('engine.utils.read_config', return_value={'mpwd': 'ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f','salt': 'e1a22653db140ba9df9f63d48989228a6dd37c65bac850ab07dddf7773c13538'})
+    @patch('engine.utils.read_config', return_value=Config('ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f','salt'))
     @patch('engine.storage.Storage.read', return_value=b'gAAAAABhaFvMaTNDlL4ZMIrknhkjpAzrO8u_CdxnycvARZeyEdO0JFmQF7J-PqX2zXBI_HIgfXzG6Fz7AeAjots7cXG4v7klaaxjMFNrVkod3sejBCQCA9yHSe3OJe1A1VjRtDgeH4qLNLlNjzuBV0vNlLLCB16GgQ==')
     @patch('engine.pwd_utils.generate_salt', return_value=b'\x055\xde\x022\x83\x92\xc3\x80?l\xd0\x14\x15`\x0b\xc678\xa1\x9d:\xba\x02\xd9&\xc2\xf6\xc6V\xbb\x00')
     @patch('engine.storage.Storage.write', return_value=None)

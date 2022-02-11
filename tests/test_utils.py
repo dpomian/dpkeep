@@ -9,13 +9,13 @@ from engine import crypto
 from engine import pwd_utils
 
 class TestUtils(unittest.TestCase):
-    def test_build_config(self):
-        mpwd = 'secret pwd'
-        asalt = pwd_utils.generate_salt(32)
-        actual = utils.build_config(mpwd, asalt)
-        self.assertTrue('mpwd' in actual)
-        self.assertTrue('salt' in actual)
-        self.assertEqual(32, len(bytes.fromhex(actual['salt'])))
+    # def test_build_config(self):
+    #     mpwd = 'secret pwd'
+    #     asalt = pwd_utils.generate_salt(32)
+    #     actual = utils.build_config(mpwd, asalt)
+    #     self.assertTrue('mpwd' in actual)
+    #     self.assertTrue('salt' in actual)
+    #     self.assertEqual(32, len(bytes.fromhex(actual['salt'])))
 
     def test_change_pwd(self):
         old_pwd = "abcd"

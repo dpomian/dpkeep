@@ -49,7 +49,7 @@ def _get_decrypted_dict(crypto, storage):
 
     if encrypted:
         try:
-            decrypted = crypto.decrypt(encrypted)
+            decrypted = crypto.decrypt(encrypted).decode()
         except cryptography.fernet.InvalidToken:
             print("your password ain't good")
             return result

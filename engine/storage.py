@@ -10,9 +10,8 @@ class Storage:
             return None
 
         with open(self._fname, "rb") as myfile:
-            data = myfile.read().splitlines()
-            if len(data) > 0:
-                return data[0]
+            data = myfile.read()
+            return data
 
         return None
 

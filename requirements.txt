@@ -1,4 +1,4 @@
-cryptography==3.4.3
+pycryptodome
 clipboard==0.0.4
 flask==1.1.2
 image==1.5.33
