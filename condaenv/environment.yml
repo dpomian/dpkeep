@@ -1,0 +1,40 @@
+name: your/path/to/conda_envs/dpkeep_env
+channels:
+  - defaults
+dependencies:
+  - ca-certificates=2022.4.26=hca03da5_0
+  - certifi=2022.5.18.1=py39hca03da5_0
+  - click=8.0.4=py39hca03da5_0
+  - dataclasses=0.8=pyh6d0b6a4_7
+  - flask=2.0.3=pyhd3eb1b0_0
+  - gmp=6.2.1=hc377ac9_3
+  - itsdangerous=2.0.1=pyhd3eb1b0_0
+  - jinja2=3.0.3=pyhd3eb1b0_0
+  - libcxx=12.0.0=hf6beb65_1
+  - libffi=3.4.2=hc377ac9_4
+  - markupsafe=2.1.1=py39h1a28f6b_0
+  - ncurses=6.3=h1a28f6b_2
+  - openssl=1.1.1o=h1a28f6b_0
+  - pip=21.2.4=py39hca03da5_0
+  - pycryptodome=3.12.0=py39h695f6f0_0
+  - python=3.9.12=hbdb9e5c_1
+  - readline=8.1.2=h1a28f6b_1
+  - setuptools=61.2.0=py39hca03da5_0
+  - sqlite=3.38.3=h1058600_0
+  - tk=8.6.12=hb8d0fd4_0
+  - tzdata=2022a=hda174b7_0
+  - werkzeug=2.0.3=pyhd3eb1b0_0
+  - wheel=0.37.1=pyhd3eb1b0_0
+  - xz=5.2.5=h1a28f6b_1
+  - zlib=1.2.12=h5a0b063_2
+  - pip:
+    - asgiref==3.5.2
+    - clipboard==0.0.4
+    - django==4.0.5
+    - image==1.5.33
+    - pillow==9.1.1
+    - pyperclip==1.8.2
+    - qrcode==7.3.1
+    - six==1.16.0
+    - sqlparse==0.4.2
+prefix: your/path/to/conda_envs/dpkeep_env
